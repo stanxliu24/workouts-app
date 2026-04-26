@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "name": "Smolov Jr Bench (sample)",
+  "author": "Stan",
+  "description": "13-week bench specialization. Demonstrates per-set %1RM progression, optional video and notes, mixed intensity expressions, and bodyweight / time / distance support.",
+  "cycle_weeks": 4,
+  "units_default": "lb",
+  "one_rep_max": {
+    "Bench Press": 275,
+    "Overhead Press": 165,
+    "Squat": 365,
+    "Deadlift": 455
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "label": "Intro",
+      "days": [
+        {
+          "day": 1,
+          "label": "Heavy bench",
+          "notes": "Pyramid up. Conservative top set.",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "video_url": "https://youtu.be/vcBig73ojpE",
+              "notes": "Pause 1s on chest. Drive feet hard. Tuck elbows ~45°.",
+              "rest_sec": 180,
+              "sets": [
+                { "reps": 5, "intensity": { "percent_1rm": 60 } },
+                { "reps": 5, "intensity": { "percent_1rm": 70 } },
+                { "reps": 5, "intensity": { "percent_1rm": 70 } },
+                { "reps": 5, "intensity": { "percent_1rm": 75 } },
+                { "reps": 5, "intensity": { "percent_1rm": 75 } },
+                { "reps": 5, "intensity": { "percent_1rm": 80 } }
+              ]
+            },
+            {
+              "name": "Overhead Press",
+              "sets": 4,
+              "reps": 8,
+              "intensity": { "percent_1rm": 65 },
+              "rest_sec": 120
+            },
+            {
+              "name": "Bent Row",
+              "sets": 3,
+              "reps": 10,
+              "intensity": { "weight": 135 },
+              "rest_sec": 90
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "label": "Volume bench",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "video_url": "https://youtu.be/vcBig73ojpE",
+              "notes": "Speed work. Don't grind.",
+              "rest_sec": 120,
+              "sets": 6,
+              "reps": 6,
+              "intensity": { "percent_1rm": 75 }
+            },
+            {
+              "name": "Plank",
+              "sets": 3,
+              "intensity": { "duration_sec": 45 },
+              "rest_sec": 60
+            },
+            {
+              "name": "Chin-ups",
+              "video_url": "https://youtu.be/eGo4IYlbE5g",
+              "notes": "Full range. Pause at top.",
+              "sets": 4,
+              "reps": "AMRAP",
+              "intensity": { "bodyweight": true },
+              "rest_sec": 120
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "label": "Tonnage bench",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "rest_sec": 180,
+              "sets": 8,
+              "reps": 3,
+              "intensity": { "percent_1rm": 80 }
+            },
+            {
+              "name": "Dips",
+              "sets": 3,
+              "reps": 10,
+              "intensity": { "bodyweight": true },
+              "rest_sec": 90
+            },
+            {
+              "name": "DB Curl",
+              "sets": 3,
+              "reps": 12,
+              "intensity": { "weight": 30 },
+              "rest_sec": 60
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "label": "PR attempt day",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "notes": "Top set RPE 9. Leave 1 in tank.",
+              "rest_sec": 240,
+              "sets": [
+                { "reps": 3, "intensity": { "percent_1rm": 70 } },
+                { "reps": 3, "intensity": { "percent_1rm": 80 } },
+                { "reps": 3, "intensity": { "percent_1rm": 85 } },
+                { "reps": 3, "intensity": { "percent_1rm": 90 }, "rpe": 9 }
+              ]
+            },
+            {
+              "name": "Tricep Pushdown",
+              "sets": 4,
+              "reps": 12,
+              "intensity": { "weight": 60 },
+              "rest_sec": 60
+            },
+            {
+              "name": "Face Pull",
+              "sets": 3,
+              "reps": 15,
+              "intensity": { "weight": 35, "rpe": 7 },
+              "rest_sec": 60
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "label": "Build",
+      "days": [
+        {
+          "day": 1,
+          "label": "Heavy bench",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "rest_sec": 180,
+              "sets": [
+                { "reps": 4, "intensity": { "percent_1rm": 65 } },
+                { "reps": 4, "intensity": { "percent_1rm": 75 } },
+                { "reps": 4, "intensity": { "percent_1rm": 75 } },
+                { "reps": 4, "intensity": { "percent_1rm": 80 } },
+                { "reps": 4, "intensity": { "percent_1rm": 80 } },
+                { "reps": 4, "intensity": { "percent_1rm": 85 } }
+              ]
+            },
+            {
+              "name": "Overhead Press",
+              "sets": 4,
+              "reps": 6,
+              "intensity": { "percent_1rm": 70 },
+              "rest_sec": 120
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "label": "Conditioning",
+          "notes": "Easy aerobic, keep HR <150.",
+          "exercises": [
+            {
+              "name": "Run",
+              "sets": 1,
+              "intensity": { "distance_m": 3219, "freeform": "easy pace, ~zone 2" }
+            },
+            {
+              "name": "Plank",
+              "sets": 3,
+              "intensity": { "duration_sec": 60 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "label": "Peak",
+      "days": [
+        {
+          "day": 1,
+          "label": "Heavy single attempt",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "notes": "Work to a heavy single, then back-off sets.",
+              "rest_sec": 240,
+              "sets": [
+                { "reps": 5, "intensity": { "percent_1rm": 50 } },
+                { "reps": 3, "intensity": { "percent_1rm": 70 } },
+                { "reps": 1, "intensity": { "percent_1rm": 85 } },
+                { "reps": 1, "intensity": { "percent_1rm": 92 } },
+                { "reps": 1, "intensity": { "percent_1rm": 97 }, "rpe": 9 },
+                { "reps": 5, "intensity": { "percent_1rm": 80 } },
+                { "reps": 5, "intensity": { "percent_1rm": 80 } }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "label": "Deload",
+      "days": [
+        {
+          "day": 1,
+          "label": "Light technique",
+          "exercises": [
+            {
+              "name": "Bench Press",
+              "notes": "Pause every rep. Focus on bar path.",
+              "sets": 3,
+              "reps": 5,
+              "intensity": { "percent_1rm": 60, "rpe": 5 },
+              "rest_sec": 90
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

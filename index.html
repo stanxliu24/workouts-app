@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Workouts">
+<meta name="theme-color" content="#f9f9fa">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Workouts</title>
+<style>
+:root{
+  --ink:oklch(0.20 0.01 250);--ink-2:oklch(0.42 0.01 250);--ink-3:oklch(0.62 0.01 250);--ink-4:oklch(0.82 0.005 250);
+  --paper:oklch(0.985 0.003 250);--paper-2:oklch(0.965 0.004 250);
+  --line:oklch(0.91 0.005 250);--line-2:oklch(0.84 0.005 250);
+  --accent:oklch(0.55 0.14 250);--accent-soft:oklch(0.95 0.03 250);
+  --warn:oklch(0.74 0.14 75);--warn-soft:oklch(0.96 0.05 75);
+  --good:oklch(0.62 0.13 155);--danger:oklch(0.58 0.18 25);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;min-height:100vh;font-size:15px;line-height:1.45}
+body{padding-bottom:env(safe-area-inset-bottom)}
+.app{display:flex;flex-direction:column;min-height:100vh;max-width:430px;margin:0 auto;background:var(--paper)}
+.scr{flex:1;padding:env(safe-area-inset-top) 20px 100px;display:flex;flex-direction:column;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tabbar{position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;height:calc(64px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);padding:8px 0 calc(8px + env(safe-area-inset-bottom));background:var(--paper);z-index:10}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--ink-3);font-weight:500;letter-spacing:0.04em;cursor:pointer;border:0;background:transparent;padding:0;font-family:inherit}
+.tab.on{color:var(--ink)}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mono{font-family:'JetBrains Mono',ui-monospace,'SF Mono',monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3)}
+.h1{font-size:30px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:0}
+.h2{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin:0}
+.h3{font-size:17px;font-weight:600;letter-spacing:-0.01em;margin:0}
+.muted{color:var(--ink-3)}
+.muted-2{color:var(--ink-2)}
+.nowrap{white-space:nowrap}
+.scrh{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0 4px;gap:12px}
+.scrsub{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink-3);padding-bottom:14px;font-weight:500;flex-wrap:wrap}
+.scrsub .dot{width:3px;height:3px;border-radius:50%;background:var(--ink-3);display:block}
+.back{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-3);padding:8px 0 4px;font-weight:500;cursor:pointer;border:0;background:transparent;font-family:inherit}
+.back svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn{width:32px;height:32px;display:grid;place-items:center;color:var(--ink);cursor:pointer;border:0;background:transparent}
+.iconbtn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;cursor:default}
+.card.muted{background:var(--paper-2)}
+.card.accent{border-color:var(--ink)}
+.card.tap{cursor:pointer}
+.card.tap:active{background:var(--paper-2)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:12px;font-size:15px;font-weight:600;letter-spacing:-0.005em;border:1px solid transparent;cursor:pointer;font-family:inherit;width:100%}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-ghost{border-color:var(--line-2);color:var(--ink);background:var(--paper)}
+.btn-soft{background:var(--paper-2);color:var(--ink);border-color:var(--line)}
+.btn-danger-ghost{border-color:var(--line-2);color:var(--danger);background:var(--paper)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn-row{display:grid;gap:8px}
+.btn-row.split{grid-template-columns:1fr 1fr}
+.setbar{display:flex;gap:4px;margin-top:10px}
+.setbar i{flex:1;height:5px;border-radius:2px;background:var(--line);display:block}
+.setbar i.done{background:var(--ink)}
+.setbar i.cur{background:var(--ink);opacity:0.35}
+.uxtg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;font-size:11px;font-family:'JetBrains Mono',ui-monospace,monospace;height:26px;letter-spacing:0.04em;cursor:pointer}
+.uxtg span{padding:0 10px;display:flex;align-items:center;font-weight:500;color:var(--ink-3)}
+.uxtg span.on{background:var(--ink);color:#fff;font-weight:600}
+.pill{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:500;text-align:center;border:1px solid var(--line);color:var(--ink-3);cursor:pointer;background:var(--paper)}
+.pill.on{background:var(--ink);color:#fff;font-weight:600;border-color:var(--ink)}
+.pill-sq{border-radius:8px}
+.pillrow{display:flex;gap:6px;padding:0 0 12px}
+.pillrow .pill{flex:1}
+.setrow{display:grid;grid-template-columns:24px 1fr auto;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:center;gap:6px}
+.setrow.pending{color:var(--ink-4)}
+.setrow.curset{background:var(--paper-2);border:1px solid var(--line-2);border-radius:10px;padding:14px;margin:8px 0;border-bottom:1px solid var(--line-2);grid-template-columns:20px 1fr;gap:10px}
+.stepper{display:flex;border:1px solid var(--line-2);border-radius:6px;background:#fff;overflow:hidden}
+.stepper button{padding:6px 10px;border:0;background:transparent;cursor:pointer;color:var(--ink);font-family:inherit}
+.stepper button:active{background:var(--paper-2)}
+.stepper .v{padding:6px 10px;font-weight:600;font-size:14px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;min-width:48px;text-align:center;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.steprow{display:flex;gap:6px;align-items:center}
+.numinput{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;padding:8px 12px;border:1px solid var(--line-2);border-radius:6px;min-width:72px;text-align:right;background:#fff;color:var(--ink);outline:none}
+.numinput:focus{border-color:var(--accent);box-shadow:0 0 0 3px oklch(0.55 0.14 250 / 0.18)}
+.setpill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:0.1em;padding:3px 8px;border:1px solid var(--line-2);border-radius:999px;color:var(--ink-3);text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-left:6px;cursor:pointer;background:transparent}
+.setpill:active{background:var(--paper-2)}
+.divider{height:1px;background:var(--line);margin:20px 0}
+.hgroup{padding-top:8px}
+.hgroup .right{display:flex;align-items:center;gap:10px}
+.hgroup .right-stack{display:flex;flex-direction:column;align-items:flex-end;gap:8px;padding-top:6px}
+.dashbox{border:1px dashed var(--line-2);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--ink-3);font-size:14px;font-weight:500;cursor:pointer;background:transparent}
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:500;z-index:1000;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.modalbg{position:fixed;inset:0;background:rgba(20,20,24,0.45);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modalbg.on{opacity:1;pointer-events:auto}
+.modalsheet{background:var(--paper);border-radius:16px 16px 0 0;width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:24px 20px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform 0.25s cubic-bezier(0.32,0.72,0,1)}
+.modalbg.on .modalsheet{transform:translateY(0)}
+.modalh{font-size:20px;font-weight:700;letter-spacing:-0.02em;margin:0 0 16px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3)}
+.field input,.field textarea,.field select{font-family:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line-2);border-radius:10px;background:#fff;color:var(--ink);outline:none;width:100%}
+.field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px oklch(0.55 0.14 250 / 0.18)}
+.calgrid{display:grid;grid-template-columns:24px repeat(7,1fr);gap:2px}
+.caldow{font-size:9px;text-align:center;color:var(--ink-3);padding:4px 0;letter-spacing:0.1em}
+.calwk{font-size:9px;color:var(--ink-3);font-weight:500;align-self:center;text-align:center}
+.calwk.cur{color:var(--accent);font-weight:700}
+.calday{aspect-ratio:1;display:grid;place-items:center;font-size:13px;font-weight:500;position:relative;border-radius:8px;cursor:pointer;font-family:'JetBrains Mono',monospace}
+.calday.off{color:var(--ink-4);cursor:default}
+.calday.today{background:var(--ink);color:#fff}
+.calday.sel{background:var(--accent-soft);border:1px solid var(--accent)}
+.calday .d{position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%}
+.calday .d.l{background:var(--ink)}
+.calday .d.s{background:var(--warn)}
+.calday.today .d{display:none}
+.statbar{display:grid;grid-template-columns:1fr 1fr 1fr;padding:16px 0}
+.statbar > div{text-align:center;border-right:1px solid var(--line)}
+.statbar > div:last-child{border-right:none}
+.statbar .v{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;font-size:20px;font-weight:600;letter-spacing:-0.01em;display:block;margin-top:4px}
+.statbar .u{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-3);margin-left:3px}
+.videocard{background:var(--ink);border-radius:12px;aspect-ratio:16/9;margin:14px 0 12px;display:grid;place-items:center;position:relative;overflow:hidden;cursor:pointer}
+.videocard .play{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.videocard .play svg{width:18px;height:18px}
+.videocard .lbl{position:absolute;bottom:10px;left:12px;font-size:10px;color:#fff;opacity:0.7;letter-spacing:0.12em;font-family:'JetBrains Mono',monospace}
+.videoframe{aspect-ratio:16/9;margin:14px 0 12px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.videoframe iframe{width:100%;height:100%;border:0;display:block}
+.timer{border:1px solid var(--ink);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+.timer .t{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:600;letter-spacing:-0.02em;line-height:1;margin-top:4px;font-variant-numeric:tabular-nums}
+.timer .actions{display:flex;gap:6px}
+.timer .pillbtn{font-size:12px;padding:8px 12px;border:1px solid var(--line-2);border-radius:999px;font-weight:500;cursor:pointer;background:transparent;color:var(--ink);font-family:inherit}
+.row{display:grid;grid-template-columns:1fr auto;padding:14px 0;border-bottom:1px solid var(--line);align-items:center;gap:8px}
+.row:last-child{border-bottom:0}
+.row label{font-size:14px;font-weight:500}
+.prchip{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent);font-weight:600;letter-spacing:0.06em}
+.prchip svg{width:12px;height:12px;fill:currentColor;stroke:none}
+.delta{font-size:11px;color:var(--accent);font-weight:600;font-family:'JetBrains Mono',monospace}
+.spark{background:var(--paper-2);border-radius:12px;padding:16px;margin-bottom:16px}
+.spark svg{width:100%;height:140px}
+.legend{display:flex;gap:16px;padding:16px 0;font-size:11px;color:var(--ink-3);letter-spacing:0.04em;align-items:center}
+.legend .dot{display:inline-block;width:5px;height:5px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.notch-pad{height:env(safe-area-inset-top)}
+hr{border:0;border-top:1px solid var(--line);margin:0}
+button{font-family:inherit}
+input[type="number"]{-moz-appearance:textfield}
+input[type="number"]::-webkit-outer-spin-button,input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.empty{padding:48px 20px;text-align:center;color:var(--ink-3)}
+.empty .h3{margin-bottom:6px;color:var(--ink-2)}
+@media (prefers-color-scheme:dark){
+  /* Light only for v1 — design system uses oklch tokens that could go dark, but skipping for now */
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<input type="file" id="filepicker" accept=".json,application/json" style="display:none">
+<div id="toast" class="toast"></div>
+<div id="modal" class="modalbg"><div class="modalsheet" id="modalsheet"></div></div>
+<script>
+'use strict';
+
+// ============================================================
+// Sample program (preloaded on first run)
+// ============================================================
+const SAMPLE_PROGRAM = {
+  schema_version: 1,
+  name: "Smolov Jr Bench",
+  author: "Built-in",
+  description: "13-week bench specialization. Per-set %1RM ramps with mixed accessory work.",
+  cycle_weeks: 4,
+  units_default: "lb",
+  one_rep_max: { "Bench Press": 275, "Overhead Press": 165 },
+  weeks: [
+    { week: 1, label: "Intro", days: [
+      { day: 1, label: "Heavy bench", notes: "Pyramid up. Conservative top set.", exercises: [
+        { name: "Bench Press", video_url: "https://www.youtube.com/embed/vcBig73ojpE", notes: "Pause 1s on chest. Drive feet hard. Tuck elbows ~45°.", rest_sec: 180,
+          sets: [
+            { reps: 5, intensity: { percent_1rm: 60 } },
+            { reps: 5, intensity: { percent_1rm: 70 } },
+            { reps: 5, intensity: { percent_1rm: 70 } },
+            { reps: 5, intensity: { percent_1rm: 75 } },
+            { reps: 5, intensity: { percent_1rm: 75 } },
+            { reps: 5, intensity: { percent_1rm: 80 } }
+          ]},
+        { name: "Overhead Press", sets: 4, reps: 8, intensity: { percent_1rm: 65 }, rest_sec: 120 },
+        { name: "Bent Row", sets: 3, reps: 10, intensity: { weight: 135 }, rest_sec: 90 }
+      ]},
+      { day: 2, label: "Volume bench", exercises: [
+        { name: "Bench Press", video_url: "https://www.youtube.com/embed/vcBig73ojpE", notes: "Speed work. Don't grind.", sets: 6, reps: 6, intensity: { percent_1rm: 75 }, rest_sec: 120 },
+        { name: "Plank", sets: 3, intensity: { duration_sec: 45 }, rest_sec: 60 },
+        { name: "Chin-ups", sets: 4, reps: "AMRAP", intensity: { bodyweight: true }, rest_sec: 120 }
+      ]},
+      { day: 3, label: "Tonnage bench", exercises: [
+        { name: "Bench Press", sets: 8, reps: 3, intensity: { percent_1rm: 80 }, rest_sec: 180 },
+        { name: "Dips", sets: 3, reps: 10, intensity: { bodyweight: true }, rest_sec: 90 },
+        { name: "DB Curl", sets: 3, reps: 12, intensity: { weight: 30 }, rest_sec: 60 }
+      ]},
+      { day: 4, label: "PR attempt", notes: "Top set RPE 9.", exercises: [
+        { name: "Bench Press", rest_sec: 240, sets: [
+          { reps: 3, intensity: { percent_1rm: 70 } },
+          { reps: 3, intensity: { percent_1rm: 80 } },
+          { reps: 3, intensity: { percent_1rm: 85 } },
+          { reps: 3, intensity: { percent_1rm: 90 } }
+        ]},
+        { name: "Tricep Pushdown", sets: 4, reps: 12, intensity: { weight: 60 }, rest_sec: 60 },
+        { name: "Face Pull", sets: 3, reps: 15, intensity: { weight: 35 }, rest_sec: 60 }
+      ]}
+    ]},
+    { week: 2, label: "Build", days: [
+      { day: 1, label: "Heavy bench", exercises: [
+        { name: "Bench Press", rest_sec: 180, sets: [
+          { reps: 4, intensity: { percent_1rm: 65 } },
+          { reps: 4, intensity: { percent_1rm: 75 } },
+          { reps: 4, intensity: { percent_1rm: 75 } },
+          { reps: 4, intensity: { percent_1rm: 80 } },
+          { reps: 4, intensity: { percent_1rm: 80 } },
+          { reps: 4, intensity: { percent_1rm: 85 } }
+        ]},
+        { name: "Overhead Press", sets: 4, reps: 6, intensity: { percent_1rm: 70 }, rest_sec: 120 }
+      ]}
+    ]},
+    { week: 3, label: "Peak", days: [
+      { day: 1, label: "Heavy single", exercises: [
+        { name: "Bench Press", rest_sec: 240, sets: [
+          { reps: 5, intensity: { percent_1rm: 50 } },
+          { reps: 3, intensity: { percent_1rm: 70 } },
+          { reps: 1, intensity: { percent_1rm: 85 } },
+          { reps: 1, intensity: { percent_1rm: 92 } },
+          { reps: 1, intensity: { percent_1rm: 97 } },
+          { reps: 5, intensity: { percent_1rm: 80 } },
+          { reps: 5, intensity: { percent_1rm: 80 } }
+        ]}
+      ]}
+    ]},
+    { week: 4, label: "Deload", days: [
+      { day: 1, label: "Light technique", exercises: [
+        { name: "Bench Press", sets: 3, reps: 5, intensity: { percent_1rm: 60 }, rest_sec: 90 }
+      ]}
+    ]}
+  ]
+};
+
+// ============================================================
+// IndexedDB
+// ============================================================
+const DB_NAME = "workoutTracker";
+const DB_VER = 1;
+let dbInst = null;
+
+function openDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("programs")) db.createObjectStore("programs", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("sessions")) db.createObjectStore("sessions", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("setLogs")) db.createObjectStore("setLogs", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("state")) db.createObjectStore("state", { keyPath: "key" });
+    };
+    req.onsuccess = () => { dbInst = req.result; resolve(dbInst); };
+    req.onerror = () => reject(req.error);
+  });
+}
+function tx(stores, mode){ return dbInst.transaction(stores, mode); }
+function dbPut(store, val){
+  return new Promise((res, rej) => {
+    const r = tx(store, "readwrite").objectStore(store).put(val);
+    r.onsuccess = () => res(val); r.onerror = () => rej(r.error);
+  });
+}
+function dbGet(store, key){
+  return new Promise((res, rej) => {
+    const r = tx(store, "readonly").objectStore(store).get(key);
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+function dbAll(store){
+  return new Promise((res, rej) => {
+    const r = tx(store, "readonly").objectStore(store).getAll();
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+function dbDel(store, key){
+  return new Promise((res, rej) => {
+    const r = tx(store, "readwrite").objectStore(store).delete(key);
+    r.onsuccess = () => res(); r.onerror = () => rej(r.error);
+  });
+}
+
+// ============================================================
+// Utilities
+// ============================================================
+const uuid = () => crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2);
+const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+const fmtDate = (iso) => { const d = new Date(iso + "T00:00:00"); return d.toLocaleDateString(undefined, { weekday:"short", month:"short", day:"numeric" }); };
+const fmtDateShort = (iso) => { const d = new Date(iso + "T00:00:00"); return d.toLocaleDateString(undefined, { month:"short", day:"numeric" }); };
+const fmtToday = () => { const d = new Date(); return d.toLocaleDateString(undefined, { weekday:"short", month:"short", day:"numeric" }).toUpperCase().replace(",", " ·"); };
+const fmtMonth = (d) => d.toLocaleDateString(undefined, { month:"long", year:"numeric" });
+
+// Unit conversion. Internal convention: weights are stored with explicit units.
+// Display: convert to State.units, round (lb → 1, kg → 0.5).
+const LB_PER_KG = 2.20462262;
+function toLb(value, units){ return units === "kg" ? value * LB_PER_KG : value; }
+function toKg(value, units){ return units === "lb" ? value / LB_PER_KG : value; }
+function convertWeight(value, fromUnits, toUnits){
+  if (!Number.isFinite(value)) return null;
+  if (fromUnits === toUnits) return value;
+  return toUnits === "lb" ? value * LB_PER_KG : value / LB_PER_KG;
+}
+function roundDisplay(value, units){
+  if (!Number.isFinite(value)) return value;
+  if (units === "lb") return Math.round(value);
+  return Math.round(value * 2) / 2; // 0.5 increments for kg
+}
+function renderWeight(value, fromUnits){
+  if (!Number.isFinite(value)) return "—";
+  const target = State.units;
+  const converted = convertWeight(value, fromUnits, target);
+  return roundDisplay(converted, target) + " " + target;
+}
+function renderWeightValueOnly(value, fromUnits){
+  if (!Number.isFinite(value)) return "—";
+  const target = State.units;
+  return String(roundDisplay(convertWeight(value, fromUnits, target), target));
+}
+
+// Compute prescribed weight for an exercise+set, using program 1RM table.
+// Returns { value, units } in the program's units_default, or null if not applicable.
+function computeIntensityWeight(intensity, exerciseName, program){
+  if (!intensity) return null;
+  if (Number.isFinite(intensity.weight)){
+    return { value: intensity.weight, units: intensity.units || program.json.units_default || "lb" };
+  }
+  if (Number.isFinite(intensity.percent_1rm)){
+    const orm = program.oneRepMax && program.oneRepMax[exerciseName];
+    if (!orm || !Number.isFinite(orm.value)) return null;
+    return { value: Math.round(orm.value * intensity.percent_1rm / 100), units: orm.units };
+  }
+  return null;
+}
+function renderIntensity(intensity, exerciseName, program){
+  if (!intensity) return "";
+  const parts = [];
+  if (Number.isFinite(intensity.percent_1rm)) parts.push(intensity.percent_1rm + "%");
+  if (intensity.bodyweight) parts.push("BW");
+  if (Number.isFinite(intensity.duration_sec)) parts.push(intensity.duration_sec + "s");
+  if (Number.isFinite(intensity.distance_m)) parts.push(Math.round(intensity.distance_m) + "m");
+  if (intensity.rpe) parts.push("RPE " + intensity.rpe);
+  if (intensity.rir) parts.push(intensity.rir + " RIR");
+  if (intensity.freeform) parts.push(intensity.freeform);
+  const w = computeIntensityWeight(intensity, exerciseName, program);
+  if (w) parts.push(`<b style="color:var(--ink)">${roundDisplay(convertWeight(w.value, w.units, State.units), State.units)} ${State.units}</b>`);
+  else if (intensity.percent_1rm){ parts.push(`<span class="muted">— ${State.units}</span>`); }
+  return parts.join(" · ");
+}
+function renderRepsForSet(set){
+  if (set.reps === "AMRAP") return "AMRAP";
+  if (Array.isArray(set.reps)) return set.reps.join("-");
+  if (Number.isFinite(set.reps)) return set.reps;
+  if (typeof set.reps === "string") return set.reps;
+  return "";
+}
+
+// Expand exercise.sets into a normalized array of { reps, intensity, rest_sec, idx }.
+function expandSets(exercise){
+  if (Array.isArray(exercise.sets)){
+    return exercise.sets.map((s, i) => ({ ...s, idx: i, rest_sec: exercise.rest_sec }));
+  }
+  const n = Number.isFinite(exercise.sets) ? exercise.sets : 1;
+  return Array.from({ length: n }, (_, i) => ({ reps: exercise.reps, intensity: exercise.intensity, rest_sec: exercise.rest_sec, idx: i }));
+}
+
+// Auto-derive lifts that need a 1RM from the program JSON.
+function liftsNeedingOneRM(program){
+  const set = new Set();
+  (program.json.weeks || []).forEach(w => (w.days || []).forEach(d => (d.exercises || []).forEach(ex => {
+    const sets = expandSets(ex);
+    if (sets.some(s => s.intensity && Number.isFinite(s.intensity.percent_1rm))) set.add(ex.name);
+  })));
+  return Array.from(set);
+}
+
+// Compute the cycle-week of a date relative to the active program's startDate.
+function cycleWeekForDate(program, dateStr){
+  if (!program || !program.startDate) return null;
+  const start = new Date(program.startDate + "T00:00:00");
+  const d = new Date(dateStr + "T00:00:00");
+  const days = Math.floor((d - start) / 86400000);
+  if (days < 0) return null;
+  const w = Math.floor(days / 7) + 1;
+  if (w > (program.json.cycle_weeks || program.json.weeks.length)) return null;
+  return w;
+}
+
+// PR check: is (weight in lb, reps) a personal record for this exercise?
+function isPersonalRecord(exerciseName, weightLb, reps){
+  const prior = State.setLogs.filter(l =>
+    l.exerciseName === exerciseName && !l.actual.skipped &&
+    Number.isFinite(l.actual.weight)
+  );
+  let best = 0;
+  for (const l of prior){
+    const wlb = toLb(l.actual.weight, l.actual.weightUnits);
+    const score = wlb * (l.actual.reps || 1);
+    if (score > best) best = score;
+  }
+  const myScore = weightLb * (reps || 1);
+  return myScore > best && weightLb > 0;
+}
+
+// ============================================================
+// State
+// ============================================================
+const State = {
+  units: "lb",
+  programs: [],
+  sessions: [],
+  setLogs: [],
+  activeProgramId: null,
+  view: { name: "today" },
+  // active session being logged (held in memory; flushed to disk on Finish)
+  activeSession: null, // { id, programId, programWeek, programDay, date, startedAt, exerciseIndex, currentSet, restRemaining, restEndsAt, notes, adhocExercises }
+  restTimerInterval: null,
+
+  activeProgram(){ return this.programs.find(p => p.id === this.activeProgramId); },
+  todaysDay(){
+    const p = this.activeProgram();
+    if (!p) return null;
+    const w = p.cursor.week;
+    const di = p.cursor.dayIndex;
+    return p.json.weeks[w-1] && p.json.weeks[w-1].days[di];
+  },
+  exercisesForToday(){
+    const day = this.todaysDay();
+    const fromProgram = day ? day.exercises.slice() : [];
+    if (this.activeSession && this.activeSession.adhocExercises){
+      return fromProgram.concat(this.activeSession.adhocExercises);
+    }
+    return fromProgram;
+  },
+  setsCompletedFor(exerciseIndex){
+    if (!this.activeSession) return 0;
+    return this.activeSession.completed[exerciseIndex] || 0;
+  },
+  async load(){
+    const stateRec = await dbGet("state", "app");
+    if (stateRec){
+      this.units = stateRec.units || "lb";
+      this.activeProgramId = stateRec.activeProgramId || null;
+      if (stateRec.activeSession) this.activeSession = stateRec.activeSession;
+    }
+    this.programs = await dbAll("programs");
+    this.sessions = await dbAll("sessions");
+    this.setLogs = await dbAll("setLogs");
+  },
+  async saveState(){
+    await dbPut("state", {
+      key: "app",
+      units: this.units,
+      activeProgramId: this.activeProgramId,
+      activeSession: this.activeSession,
+      lastSeenAppVersion: "1.0.0"
+    });
+  }
+};
+
+// ============================================================
+// Sample preload
+// ============================================================
+async function preloadSample(){
+  const id = uuid();
+  const prog = {
+    id,
+    name: SAMPLE_PROGRAM.name,
+    json: SAMPLE_PROGRAM,
+    oneRepMax: {
+      "Bench Press": { value: 275, units: "lb" },
+      "Overhead Press": { value: 165, units: "lb" }
+    },
+    status: "active",
+    cursor: { week: 1, dayIndex: 0 },
+    startDate: todayISO(),
+    importedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  await dbPut("programs", prog);
+  State.programs.push(prog);
+  State.activeProgramId = id;
+  await State.saveState();
+}
+
+// ============================================================
+// Active session helpers
+// ============================================================
+function ensureActiveSession(){
+  if (State.activeSession) return State.activeSession;
+  const p = State.activeProgram();
+  if (!p) return null;
+  const day = State.todaysDay();
+  State.activeSession = {
+    id: uuid(),
+    programId: p.id,
+    programWeek: p.cursor.week,
+    programDay: day ? day.day : null,
+    date: todayISO(),
+    startedAt: new Date().toISOString(),
+    completed: {},   // exerciseIndex → number of sets done
+    setActuals: {},  // `${exerciseIndex}:${setIndex}` → actual log payload (not yet flushed)
+    notes: "",
+    adhocExercises: [],
+    restEndsAt: null,
+    currentExerciseIndex: null
+  };
+  return State.activeSession;
+}
+
+async function finishSession(status){
+  const s = State.activeSession;
+  if (!s){ return; }
+  const p = State.activeProgram();
+  // Flush set logs
+  for (const k of Object.keys(s.setActuals)){
+    const log = s.setActuals[k];
+    log.id = log.id || uuid();
+    log.sessionId = s.id;
+    await dbPut("setLogs", log);
+    State.setLogs.push(log);
+  }
+  // Save session
+  const session = {
+    id: s.id, programId: s.programId, programWeek: s.programWeek, programDay: s.programDay,
+    date: s.date, status: status || "logged",
+    startedAt: s.startedAt, endedAt: new Date().toISOString(),
+    notes: s.notes || ""
+  };
+  await dbPut("sessions", session);
+  State.sessions.push(session);
+  // Advance cursor (advance-on-completion)
+  if (p){
+    const wks = p.json.weeks;
+    const w = p.cursor.week;
+    const days = (wks[w-1] && wks[w-1].days) || [];
+    if (p.cursor.dayIndex < days.length - 1){
+      p.cursor.dayIndex++;
+    } else if (w < wks.length){
+      p.cursor.week++;
+      p.cursor.dayIndex = 0;
+    } else {
+      p.status = "completed";
+    }
+    p.updatedAt = new Date().toISOString();
+    await dbPut("programs", p);
+  }
+  State.activeSession = null;
+  if (State.restTimerInterval){ clearInterval(State.restTimerInterval); State.restTimerInterval = null; }
+  await State.saveState();
+}
+
+function logSet(exerciseIndex, setIndex, exercise, set, actual){
+  const sess = ensureActiveSession();
+  const w = computeIntensityWeight(set.intensity, exercise.name, State.activeProgram());
+  // Convert actual values to lb for PR check, then store as entered
+  const enteredUnits = State.units;
+  const weightInEntered = actual.weight;
+  const weightInLb = toLb(weightInEntered, enteredUnits);
+  const isPR = Number.isFinite(weightInEntered) && isPersonalRecord(exercise.name, weightInLb, actual.reps);
+  const log = {
+    id: uuid(),
+    sessionId: sess.id,
+    exerciseName: exercise.name,
+    exerciseIndex: exerciseIndex,
+    setIndex: setIndex,
+    prescribed: {
+      reps: set.reps,
+      intensity: set.intensity,
+      computedWeight: w ? roundDisplay(convertWeight(w.value, w.units, enteredUnits), enteredUnits) : null,
+      computedWeightUnits: w ? enteredUnits : null
+    },
+    actual: {
+      weight: actual.weight,
+      weightUnits: enteredUnits,
+      reps: actual.reps,
+      skipped: !!actual.skipped,
+      markedAllDone: !!actual.markedAllDone
+    },
+    loggedAt: new Date().toISOString(),
+    isPR: isPR
+  };
+  sess.setActuals[`${exerciseIndex}:${setIndex}`] = log;
+  sess.completed[exerciseIndex] = Math.max(sess.completed[exerciseIndex] || 0, setIndex + 1);
+  // Start rest timer
+  const rest = (exercise.rest_sec) || (set.rest_sec) || 120;
+  sess.restEndsAt = Date.now() + rest * 1000;
+  startRestTimer();
+  State.saveState();
+  return log;
+}
+
+function startRestTimer(){
+  if (State.restTimerInterval){ clearInterval(State.restTimerInterval); }
+  State.restTimerInterval = setInterval(() => {
+    const s = State.activeSession;
+    if (!s || !s.restEndsAt){ clearInterval(State.restTimerInterval); State.restTimerInterval = null; return; }
+    if (Date.now() >= s.restEndsAt){
+      s.restEndsAt = null;
+      clearInterval(State.restTimerInterval); State.restTimerInterval = null;
+      render();
+      return;
+    }
+    // Update timer text only
+    const el = document.getElementById("rest-timer-text");
+    if (el){ el.textContent = fmtDuration(Math.max(0, s.restEndsAt - Date.now())); }
+  }, 250);
+}
+function fmtDuration(ms){
+  const s = Math.ceil(ms / 1000);
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${String(r).padStart(2,"0")}`;
+}
+
+// ============================================================
+// Icons (inline SVG)
+// ============================================================
+const ICO = {
+  programs: '<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="3" rx="1"/><rect x="4" y="11" width="16" height="3" rx="1"/><rect x="4" y="17" width="16" height="3" rx="1"/></svg>',
+  today: '<svg viewBox="0 0 24 24"><path d="M12 3c2 4 6 6 6 11a6 6 0 1 1-12 0c0-3 2-4 3-7c1 2 2 2 3-4z"/></svg>',
+  history: '<svg viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="9" y1="3" x2="9" y2="7"/><line x1="15" y1="3" x2="15" y2="7"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  more: '<svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>',
+  check: '<svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"/></svg>',
+  cleft: '<svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>',
+  cright: '<svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>',
+  trend: '<svg viewBox="0 0 24 24"><polyline points="4 18 9 12 14 15 20 6"/><line x1="4" y1="20" x2="20" y2="20"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><polygon points="12 3 14.5 9 21 9.5 16 14 17.5 21 12 17.5 6.5 21 8 14 3 9.5 9.5 9" fill="currentColor" stroke="none"/></svg>',
+  trash: '<svg viewBox="0 0 24 24"><polyline points="4 7 20 7"/><path d="M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7"/></svg>',
+  edit: '<svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>',
+  imp: '<svg viewBox="0 0 24 24"><path d="M12 4v12"/><polyline points="7 11 12 16 17 11"/><path d="M5 20h14"/></svg>',
+  exp: '<svg viewBox="0 0 24 24"><path d="M12 20V8"/><polyline points="7 13 12 8 17 13"/><path d="M5 20h14"/></svg>',
+  play: '<svg viewBox="0 0 24 24"><polygon points="7 5 19 12 7 19" fill="currentColor" stroke="none"/></svg>',
+  skipfwd: '<svg viewBox="0 0 24 24"><polygon points="5 5 14 12 5 19" fill="currentColor" stroke="none"/><line x1="17" y1="5" x2="17" y2="19"/></svg>',
+  minus: '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>'
+};
+
+// ============================================================
+// Renderers
+// ============================================================
+function tabBar(active){
+  return `<nav class="tabbar">
+    <button class="tab ${active==='programs'?'on':''}" data-action="nav" data-view="library">${ICO.programs}<span>Programs</span></button>
+    <button class="tab ${active==='today'?'on':''}" data-action="nav" data-view="today">${ICO.today}<span>Today</span></button>
+    <button class="tab ${active==='history'?'on':''}" data-action="nav" data-view="history">${ICO.history}<span>History</span></button>
+  </nav>`;
+}
+function unitToggle(){
+  return `<div class="uxtg" data-action="toggle-units">
+    <span class="${State.units==='lb'?'on':''}">lb</span>
+    <span class="${State.units==='kg'?'on':''}">kg</span>
+  </div>`;
+}
+
+// ----- LIBRARY -----
+function renderLibrary(){
+  const programs = State.programs;
+  const active = programs.filter(p => p.id === State.activeProgramId);
+  const others = programs.filter(p => p.id !== State.activeProgramId);
+  const cardActive = active.map(p => {
+    const totalDays = (p.json.weeks || []).reduce((sum, w) => sum + (w.days||[]).length, 0);
+    let doneDays = 0;
+    for (let wi = 0; wi < p.cursor.week - 1; wi++){
+      doneDays += (p.json.weeks[wi].days || []).length;
+    }
+    doneDays += p.cursor.dayIndex;
+    const pct = totalDays ? Math.round(doneDays / totalDays * 100) : 0;
+    return `<div class="card accent tap" data-action="open-program" data-id="${p.id}" style="margin-bottom:12px;padding:18px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="eyebrow" style="color:var(--ink)">Active</div><div class="h2" style="margin-top:4px">${esc(p.name)}</div></div>
+        <div class="mono muted" style="font-size:13px">${p.json.cycle_weeks || p.json.weeks.length} wk</div>
+      </div>
+      <div class="mono" style="font-size:12px;color:var(--ink-3);margin-top:14px;display:flex;justify-content:space-between">
+        <span>WEEK ${p.cursor.week} · DAY ${p.cursor.dayIndex+1} OF ${(p.json.weeks[p.cursor.week-1]?.days?.length)||0}</span>
+        <span style="color:var(--ink);font-weight:600">${pct}%</span>
+      </div>
+      <div style="height:4px;background:var(--line);border-radius:2px;margin-top:6px;overflow:hidden"><div style="width:${pct}%;height:100%;background:var(--ink)"></div></div>
+    </div>`;
+  }).join("");
+  const cardOthers = others.map(p => {
+    return `<div class="card tap" data-action="open-program" data-id="${p.id}" style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div class="eyebrow">${p.status === "completed" ? "Completed" : "Paused"}</div>
+          <div class="h3" style="margin-top:2px">${esc(p.name)}</div>
+          <div class="mono" style="font-size:12px;color:var(--ink-3);margin-top:4px">WK ${p.cursor.week} · D${p.cursor.dayIndex+1} · ${p.json.cycle_weeks || p.json.weeks.length} wk total</div>
+        </div>
+        <div class="iconbtn">${ICO.cright}</div>
+      </div>
+    </div>`;
+  }).join("");
+  const empty = programs.length === 0 ? `<div class="empty"><div class="h3">No programs yet</div><div>Import a workout JSON to get started.</div></div>` : "";
+  return `<main class="scr">
+    <div class="scrh hgroup">
+      <div><h1 class="h1">Programs</h1></div>
+      <div class="right" style="padding-top:6px">
+        <button class="iconbtn" data-action="import-program" title="Import">${ICO.plus}</button>
+      </div>
+    </div>
+    <div class="scrsub"><span>${programs.length} imported</span><span class="dot"></span><span>${active.length} active</span></div>
+    ${cardActive}
+    ${cardOthers}
+    ${empty}
+    <div class="dashbox" data-action="import-program" style="margin-top:8px">${ICO.imp}<span>Import program (.json)</span></div>
+  </main>${tabBar('programs')}`;
+}
+
+// ----- TODAY -----
+function renderToday(){
+  const p = State.activeProgram();
+  if (!p){
+    return `<main class="scr">
+      <div class="empty"><div class="h3">No active program</div><div>Pick or import one to start training.</div>
+        <div style="margin-top:16px"><button class="btn btn-primary" data-action="nav" data-view="library">Go to Programs</button></div>
+      </div>
+    </main>${tabBar('today')}`;
+  }
+  if (p.status === "completed"){
+    return `<main class="scr">
+      <div class="empty"><div class="h3">${esc(p.name)} complete</div><div>Cycle finished. Restart from Programs, or import a new one.</div></div>
+    </main>${tabBar('today')}`;
+  }
+  const day = State.todaysDay();
+  if (!day){ return `<main class="scr"><div class="empty">No day data.</div></main>${tabBar('today')}`; }
+  const exercises = State.exercisesForToday();
+  const sess = State.activeSession;
+
+  const cards = exercises.map((ex, idx) => {
+    const sets = expandSets(ex);
+    const total = sets.length;
+    const done = (sess && sess.completed[idx]) || 0;
+    const isCurrent = sess && sess.currentExerciseIndex === idx;
+    const segs = sets.map((_, i) => `<i class="${i < done ? 'done' : (i === done ? 'cur' : '')}"></i>`).join("");
+    const intensityHTML = ex.intensity ? renderIntensity(ex.intensity, ex.name, p) : "";
+    const totalReps = (typeof ex.reps !== "undefined") ? `${total} × ${renderRepsForSet({reps:ex.reps})}` : `${total} sets`;
+    let line2;
+    if (Array.isArray(ex.sets)){
+      // Per-set display: show range of intensities
+      const pcts = sets.map(s => s.intensity?.percent_1rm).filter(x=>x);
+      if (pcts.length){
+        const lo = Math.min(...pcts), hi = Math.max(...pcts);
+        const rangeStr = lo === hi ? `${lo}%` : `${lo}–${hi}%`;
+        line2 = `${total} × varied · <b>${rangeStr}</b>`;
+      } else {
+        const w = computeIntensityWeight(sets[0].intensity, ex.name, p);
+        line2 = `${total} sets · ${w ? `<b style="color:var(--ink)">${roundDisplay(convertWeight(w.value,w.units,State.units),State.units)} ${State.units}</b>` : intensityHTML}`;
+      }
+    } else {
+      line2 = `${totalReps}${intensityHTML ? ' · ' + intensityHTML : ''}`;
+    }
+    const missing = Array.isArray(ex.sets)
+      ? sets.some(s => s.intensity?.percent_1rm) && !p.oneRepMax?.[ex.name]
+      : (ex.intensity?.percent_1rm && !p.oneRepMax?.[ex.name]);
+    const setMsg = missing ? `<button class="setpill" data-action="open-program" data-id="${p.id}">Set 1RM ›</button>` : "";
+    return `<div class="card ${isCurrent ? 'accent' : ''} tap" data-action="open-exercise" data-idx="${idx}" style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="h3">${esc(ex.name)}</div>
+          <div class="mono" style="font-size:12px;color:var(--ink-2);margin-top:4px">${line2}${setMsg}</div>
+        </div>
+        <div class="mono" style="font-size:13px;color:var(--ink-3)"><b style="color:var(--ink);font-weight:600">${done}</b>/${total}</div>
+      </div>
+      <div class="setbar">${segs}</div>
+    </div>`;
+  }).join("");
+
+  return `<main class="scr">
+    <div class="scrh hgroup">
+      <div><h1 class="h1">Today</h1></div>
+      <div class="right-stack">
+        <div class="mono nowrap" style="font-size:13px;color:var(--ink-3);font-weight:500">${fmtToday()}</div>
+        ${unitToggle()}
+      </div>
+    </div>
+    <div class="scrsub">
+      <span>${esc(p.name)}</span><span class="dot"></span>
+      <span>Wk ${p.cursor.week} · D${p.cursor.dayIndex+1}</span>
+      ${day.label ? `<span class="dot"></span><span>${esc(day.label)}</span>` : ''}
+      <button class="setpill" data-action="open-week" data-week="${p.cursor.week}" style="margin-left:auto">Week ›</button>
+    </div>
+    ${cards}
+    <div class="btn-row" style="padding:16px 0">
+      <button class="btn btn-primary" data-action="finish-session">${ICO.check}<span>Finish session</span></button>
+      <div class="btn-row split">
+        <button class="btn btn-ghost" data-action="add-exercise">${ICO.plus}<span>Add exercise</span></button>
+        <button class="btn btn-ghost" data-action="today-more">${ICO.more}<span>More</span></button>
+      </div>
+    </div>
+  </main>${tabBar('today')}`;
+}
+
+// ----- EXERCISE (active set) -----
+function renderExercise(idx){
+  const p = State.activeProgram();
+  if (!p) return renderToday();
+  const exercises = State.exercisesForToday();
+  const ex = exercises[idx];
+  if (!ex) return renderToday();
+  ensureActiveSession();
+  State.activeSession.currentExerciseIndex = idx;
+  const sess = State.activeSession;
+  const sets = expandSets(ex);
+  const done = sess.completed[idx] || 0;
+  const totalReps = sets.length;
+
+  // Video card
+  let videoHTML = "";
+  if (ex.video_url){
+    videoHTML = `<div class="videoframe"><iframe src="${esc(ex.video_url)}" allowfullscreen loading="lazy"></iframe></div>`;
+  }
+  // Notes
+  const notesHTML = ex.notes ? `<div class="card muted" style="margin-bottom:12px;font-size:13px;color:var(--ink-2);line-height:1.5">${esc(ex.notes)}</div>` : "";
+
+  // Rest timer banner
+  let timerHTML = "";
+  if (sess.restEndsAt && Date.now() < sess.restEndsAt){
+    timerHTML = `<div class="timer">
+      <div><div class="eyebrow">Resting</div><div class="t mono" id="rest-timer-text">${fmtDuration(sess.restEndsAt - Date.now())}</div></div>
+      <div class="actions">
+        <button class="pillbtn" data-action="rest-add">+30s</button>
+        <button class="pillbtn" data-action="rest-skip">Skip</button>
+      </div>
+    </div>`;
+  }
+
+  // Set rows
+  const rows = sets.map((s, i) => {
+    const w = computeIntensityWeight(s.intensity, ex.name, p);
+    const pct = s.intensity?.percent_1rm;
+    const isDone = i < done;
+    const isCurrent = i === done;
+    const wText = w ? `${roundDisplay(convertWeight(w.value, w.units, State.units), State.units)}` : "—";
+    const reps = renderRepsForSet(s);
+    const prescribed = pct ? `${pct}% · ${wText} × ${reps}` : `${wText} ${State.units} × ${reps}`;
+    if (isDone){
+      const log = sess.setActuals[`${idx}:${i}`];
+      const aw = log ? renderWeightValueOnly(log.actual.weight, log.actual.weightUnits) : wText;
+      const ar = log ? log.actual.reps : reps;
+      return `<div class="setrow"><span class="mono muted">${i+1}</span><span class="mono muted">${pct?pct+"% · ":""}${aw} × ${ar}${log?.isPR?' <span class="prchip">'+ICO.star+'PR</span>':''}</span><span style="color:var(--ink)">${ICO.check}</span></div>`;
+    }
+    if (isCurrent){
+      const wInput = w ? roundDisplay(convertWeight(w.value, w.units, State.units), State.units) : "";
+      const rInput = (typeof reps === "number") ? reps : "";
+      return `<div class="setrow curset" data-cur-set="${i}">
+        <span class="mono" style="font-weight:600;font-size:13px">${i+1}</span>
+        <div>
+          <div class="mono" style="font-size:11px;color:var(--ink-3);margin-bottom:8px">${pct?pct+"% · ":""}prescribed ${wText} × ${reps}</div>
+          <div class="steprow">
+            <div class="stepper"><button data-action="step" data-target="weight-${i}" data-by="-${State.units==='kg'?'2.5':'5'}">−</button><div class="v" id="cur-weight">${wInput || ""}</div><button data-action="step" data-target="weight-${i}" data-by="${State.units==='kg'?'2.5':'5'}">+</button></div>
+            <span class="mono muted">×</span>
+            <div class="stepper"><button data-action="step" data-target="reps-${i}" data-by="-1">−</button><div class="v" id="cur-reps">${rInput || ""}</div><button data-action="step" data-target="reps-${i}" data-by="1">+</button></div>
+          </div>
+        </div>
+      </div>`;
+    }
+    // pending
+    return `<div class="setrow pending"><span class="mono">${i+1}</span><span class="mono">${pct?pct+"% · ":""}${wText} × ${reps}</span><span></span></div>`;
+  }).join("");
+
+  const allDone = done >= sets.length;
+
+  return `<main class="scr">
+    <button class="back" data-action="nav" data-view="today">${ICO.cleft}<span>Today</span></button>
+    <div class="scrh hgroup">
+      <div><h1 class="h1">${esc(ex.name)}</h1>
+        <div class="mono" style="font-size:12px;color:var(--ink-3);margin-top:6px;letter-spacing:0.06em">SET ${Math.min(done+1, sets.length)} OF ${sets.length}${ex.rest_sec ? ' · REST '+fmtDuration(ex.rest_sec*1000) : ''}</div>
+      </div>
+      <div class="right-stack">${unitToggle()}<button class="iconbtn" data-action="open-progress" data-name="${esc(ex.name)}">${ICO.trend}</button></div>
+    </div>
+    ${videoHTML}
+    ${notesHTML}
+    ${timerHTML}
+    <div class="eyebrow" style="margin-bottom:8px">Sets · per-set %</div>
+    ${rows}
+    <div class="btn-row split" style="padding:16px 0">
+      <button class="btn btn-ghost" data-action="mark-all-done" data-idx="${idx}" ${allDone?'disabled':''}>Mark all done</button>
+      <button class="btn btn-primary" data-action="log-set" data-idx="${idx}" ${allDone?'disabled':''}>${allDone?'All set':'Log set'}</button>
+    </div>
+  </main>${tabBar('today')}`;
+}
+
+// ----- WEEK -----
+function renderWeek(weekNum){
+  const p = State.activeProgram();
+  if (!p) return renderToday();
+  const w = p.json.weeks[weekNum-1];
+  if (!w) return renderToday();
+  const isCurWeek = p.cursor.week === weekNum;
+  const days = (w.days||[]).map((d, di) => {
+    const isToday = isCurWeek && p.cursor.dayIndex === di;
+    const isDone = (weekNum < p.cursor.week) || (isCurWeek && di < p.cursor.dayIndex);
+    const lifts = (d.exercises||[]).map(ex => {
+      const sets = expandSets(ex);
+      const total = sets.length;
+      const w = computeIntensityWeight(sets[0].intensity, ex.name, p);
+      const pcts = sets.map(s => s.intensity?.percent_1rm).filter(x=>x);
+      let suf = "";
+      if (Array.isArray(ex.sets) && pcts.length){
+        const lo = Math.min(...pcts), hi = Math.max(...pcts);
+        suf = ` @ ${lo===hi?lo:lo+'–'+hi}%`;
+      } else if (ex.intensity?.percent_1rm){
+        suf = ` @ ${ex.intensity.percent_1rm}%`;
+      } else if (ex.intensity?.bodyweight){
+        suf = `, BW`;
+      } else if (w){
+        suf = ` @ ${roundDisplay(convertWeight(w.value,w.units,State.units),State.units)} ${State.units}`;
+      }
+      const reps = ex.reps !== undefined ? ` ${total}×${renderRepsForSet({reps:ex.reps})}` : ` ${total} sets`;
+      if (Array.isArray(ex.sets)){ /* show as N×reps if uniform reps */
+        const allReps = sets.every(s => s.reps === sets[0].reps) ? sets[0].reps : "varied";
+        return `${esc(ex.name)} ${total}×${allReps}${suf}`;
+      }
+      return `${esc(ex.name)}${reps}${suf}`;
+    }).join("<br>");
+    const cls = isToday ? 'card accent' : (isDone ? 'card muted' : 'card');
+    return `<div class="${cls}" style="margin-bottom:8px;padding:14px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+        <div><div class="eyebrow"${isToday?' style="color:var(--ink)"':''}>Day ${d.day}</div>${d.label?`<div class="h3" style="margin-top:2px">${esc(d.label)}</div>`:''}</div>
+        ${isToday?`<span class="mono" style="font-size:10px;padding:4px 8px;background:var(--ink);color:#fff;border-radius:4px;letter-spacing:0.1em;font-weight:600">TODAY</span>`:isDone?`<span style="color:var(--ink-3)">${ICO.check}</span>`:''}
+      </div>
+      <div class="mono" style="font-size:12px;color:var(--ink-2);line-height:1.7">${lifts}</div>
+    </div>`;
+  }).join("");
+  const totalWks = p.json.weeks.length;
+  return `<main class="scr">
+    <button class="back" data-action="nav" data-view="today">${ICO.cleft}<span>Today</span></button>
+    <div class="scrh hgroup">
+      <div><h1 class="h1">Week ${weekNum}</h1></div>
+      <div class="right-stack"><div class="mono muted" style="font-size:13px">${weekNum} / ${totalWks}</div>${unitToggle()}</div>
+    </div>
+    <div class="scrsub"><span>${esc(p.name)}</span>${w.label?`<span class="dot"></span><span>${esc(w.label)}</span>`:''}</div>
+    ${days}
+    <div class="btn-row split" style="padding:8px 0 16px">
+      <button class="btn btn-ghost" data-action="open-week" data-week="${weekNum-1}" ${weekNum<=1?'disabled':''}>${ICO.cleft}<span>Wk ${weekNum-1}</span></button>
+      <button class="btn btn-ghost" data-action="open-week" data-week="${weekNum+1}" ${weekNum>=totalWks?'disabled':''}><span>Wk ${weekNum+1}</span>${ICO.cright}</button>
+    </div>
+  </main>${tabBar('today')}`;
+}
+
+// ----- HISTORY (calendar) -----
+function renderHistory(monthOffset){
+  const today = new Date();
+  const view = new Date(today.getFullYear(), today.getMonth() + (monthOffset||0), 1);
+  const monthLabel = fmtMonth(view);
+  // Build grid: rows of 7, starting from previous Sunday
+  const firstDow = view.getDay();
+  const start = new Date(view); start.setDate(1 - firstDow);
+  const rows = [];
+  for (let r = 0; r < 6; r++){
+    const days = [];
+    for (let c = 0; c < 7; c++){
+      const d = new Date(start); d.setDate(start.getDate() + r*7 + c);
+      days.push(d);
+    }
+    rows.push(days);
+  }
+  const todayStr = todayISO();
+  const sessIdx = {};
+  State.sessions.forEach(s => { sessIdx[s.date] = s; });
+  const p = State.activeProgram();
+  const sel = State._selDate || null;
+
+  const dowH = ["S","M","T","W","T","F","S"].map(d => `<div class="caldow mono">${d}</div>`).join("");
+  const grid = rows.map(daysOfRow => {
+    const offMonth = daysOfRow[0].getMonth() !== view.getMonth() && daysOfRow[6].getMonth() !== view.getMonth();
+    if (offMonth) return "";
+    const dStrs = daysOfRow.map(d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`);
+    const wkLabel = p ? cycleWeekForDate(p, dStrs[0]) : null;
+    const wkActive = wkLabel === p?.cursor?.week;
+    const wkText = wkLabel ? `w${wkLabel}` : "";
+    const cells = daysOfRow.map((d, i) => {
+      const off = d.getMonth() !== view.getMonth();
+      const ds = dStrs[i];
+      const sess = sessIdx[ds];
+      const isToday = ds === todayStr;
+      const isSel = ds === sel;
+      const cls = ['calday'];
+      if (off) cls.push('off');
+      if (isToday) cls.push('today');
+      if (isSel) cls.push('sel');
+      const dot = sess ? `<span class="d ${sess.status==='skipped'?'s':'l'}"></span>` : "";
+      return `<div class="${cls.join(' ')}" ${off?'':`data-action="cal-select" data-date="${ds}"`}><span>${d.getDate()}</span>${dot}</div>`;
+    }).join("");
+    return `<div class="calgrid"><div class="calwk mono ${wkActive?'cur':''}">${wkText}</div>${cells}</div>`;
+  }).join("");
+
+  // Selected day card
+  let detail = "";
+  if (sel && sessIdx[sel]){
+    const s = sessIdx[sel];
+    const sLogs = State.setLogs.filter(l => l.sessionId === s.id);
+    const summary = summarizeSession(s, sLogs);
+    detail = `<div class="card tap" data-action="open-session" data-id="${s.id}" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <div class="h3">${fmtDate(s.date)}</div>
+        <div class="mono" style="font-size:11px;color:var(--ink-3);letter-spacing:0.06em">${s.programWeek?`W${s.programWeek} · D${s.programDay}`:""}</div>
+      </div>
+      <div style="font-size:12px;color:var(--ink-3);margin-top:2px">${esc(programName(s.programId))}${s.status==='skipped'?' · Skipped':''}</div>
+      <div class="mono" style="font-size:12px;color:var(--ink-2);margin:10px 0;line-height:1.6">${summary.exerciseLine || (s.status==='skipped'?'No sets logged.':'No exercises.')}</div>
+      <div class="mono" style="font-size:11px;color:var(--ink-3);display:flex;gap:16px;padding-top:10px;border-top:1px solid var(--line)">
+        <span>VOL <b style="color:var(--ink);font-weight:600">${summary.volume}</b></span>
+        <span>DUR <b style="color:var(--ink);font-weight:600">${summary.dur}</b></span>
+        <span>PR <b style="color:var(--ink);font-weight:600">${summary.prs}</b></span>
+      </div>
+    </div>`;
+  } else if (sel){
+    detail = `<div class="card muted" style="margin-top:18px;font-size:13px;color:var(--ink-3)">No session on ${fmtDate(sel)}.</div>`;
+  }
+
+  return `<main class="scr">
+    <div class="scrh hgroup"><div><h1 class="h1">History</h1></div><div class="right" style="padding-top:6px">${unitToggle()}</div></div>
+    <div class="pillrow">
+      <button class="pill on">Calendar</button>
+      <button class="pill" data-action="todo-trends">Trends</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 0 12px">
+      <button class="iconbtn" data-action="cal-month" data-by="-1">${ICO.cleft}</button>
+      <div class="h3">${monthLabel}</div>
+      <button class="iconbtn" data-action="cal-month" data-by="1">${ICO.cright}</button>
+    </div>
+    <div class="calgrid" style="margin-bottom:4px"><div></div>${dowH}</div>
+    ${grid}
+    ${detail}
+    <div class="legend"><span><span class="dot" style="background:var(--ink)"></span>Logged</span><span><span class="dot" style="background:var(--warn)"></span>Skipped</span></div>
+  </main>${tabBar('history')}`;
+}
+function programName(programId){
+  const p = State.programs.find(x => x.id === programId);
+  return p ? p.name : "Deleted program";
+}
+function summarizeSession(session, logs){
+  let lbVol = 0, prs = 0;
+  const byEx = {};
+  logs.forEach(l => {
+    if (l.actual.skipped) return;
+    if (l.isPR) prs++;
+    if (Number.isFinite(l.actual.weight) && Number.isFinite(l.actual.reps)){
+      lbVol += toLb(l.actual.weight, l.actual.weightUnits) * l.actual.reps;
+    }
+    if (!byEx[l.exerciseName]) byEx[l.exerciseName] = 0;
+    byEx[l.exerciseName]++;
+  });
+  const exerciseLine = Object.entries(byEx).slice(0, 4).map(([n, c]) => `${n} ×${c}`).join(" · ");
+  let dur = "—";
+  if (session.startedAt && session.endedAt){
+    const m = Math.round((new Date(session.endedAt) - new Date(session.startedAt)) / 60000);
+    dur = m + "m";
+  }
+  const vol = State.units === "kg" ? `${roundDisplay(lbVol/LB_PER_KG, "kg")} kg` : `${Math.round(lbVol)} lb`;
+  return { volume: vol, dur, prs, exerciseLine };
+}
+
+// ----- SESSION DETAIL -----
+function renderSession(id){
+  const s = State.sessions.find(x => x.id === id);
+  if (!s) return renderHistory(0);
+  const logs = State.setLogs.filter(l => l.sessionId === id);
+  const summary = summarizeSession(s, logs);
+  const byEx = {};
+  logs.forEach(l => { if (!byEx[l.exerciseName]) byEx[l.exerciseName] = []; byEx[l.exerciseName].push(l); });
+  const sections = Object.entries(byEx).map(([name, arr]) => {
+    arr.sort((a,b) => a.setIndex - b.setIndex);
+    const rows = arr.map((l, i) => {
+      const pct = l.prescribed?.intensity?.percent_1rm;
+      const w = renderWeightValueOnly(l.actual.weight, l.actual.weightUnits);
+      return `<div style="display:grid;grid-template-columns:20px 1fr auto;padding:10px 0;border-bottom:1px solid var(--line);align-items:center;gap:6px">
+        <span class="mono muted" style="font-size:12px">${l.setIndex+1}</span>
+        <span class="mono muted-2" style="font-size:13px">${pct?pct+"% · ":""}${w} ${State.units} × ${l.actual.reps}${l.actual.skipped?' (skipped)':''}</span>
+        ${l.isPR?`<span class="prchip">${ICO.star}PR</span>`:'<span></span>'}
+      </div>`;
+    }).join("");
+    return `<div class="h3" style="margin-top:20px;margin-bottom:8px">${esc(name)}</div>${rows}`;
+  }).join("");
+  const notes = s.notes ? `<div class="h3" style="margin-top:20px;margin-bottom:8px">Notes</div><div class="card muted" style="font-size:13px;color:var(--ink-2);line-height:1.5">${esc(s.notes)}</div>` : "";
+  return `<main class="scr">
+    <button class="back" data-action="nav" data-view="history">${ICO.cleft}<span>History</span></button>
+    <div class="scrh hgroup">
+      <div><div class="h2">${fmtDate(s.date)}</div>
+      <div class="mono" style="font-size:12px;color:var(--ink-3);margin-top:4px;letter-spacing:0.06em">${s.programWeek?`W${s.programWeek} · D${s.programDay} · `:""}${esc(programName(s.programId)).toUpperCase()}</div></div>
+      <div class="right-stack">${unitToggle()}</div>
+    </div>
+    <div class="card statbar" style="margin:12px 0 0">
+      <div><div class="eyebrow">Volume</div><span class="v">${summary.volume.split(" ")[0]}</span><span class="u">${summary.volume.split(" ")[1]||""}</span></div>
+      <div><div class="eyebrow">Duration</div><span class="v">${summary.dur.replace(/[a-z]/gi,'')}</span><span class="u">min</span></div>
+      <div><div class="eyebrow">PRs</div><span class="v">${summary.prs}</span></div>
+    </div>
+    ${sections}
+    ${notes}
+    <div class="btn-row split" style="padding:24px 0 16px">
+      <button class="btn btn-ghost" data-action="edit-session-notes" data-id="${s.id}">${ICO.edit}<span>Edit notes</span></button>
+      <button class="btn btn-danger-ghost" data-action="delete-session" data-id="${s.id}">${ICO.trash}<span>Delete</span></button>
+    </div>
+  </main>${tabBar('history')}`;
+}
+
+// ----- PROGRESS -----
+function renderProgress(name){
+  const p = State.activeProgram();
+  const exLogs = State.setLogs.filter(l => l.exerciseName === name && !l.actual.skipped && Number.isFinite(l.actual.weight));
+  // Top set per session
+  const bySession = {};
+  exLogs.forEach(l => {
+    const wlb = toLb(l.actual.weight, l.actual.weightUnits);
+    const score = wlb * (l.actual.reps || 1);
+    if (!bySession[l.sessionId] || bySession[l.sessionId].score < score){
+      bySession[l.sessionId] = { score, weightLb: wlb, reps: l.actual.reps, sessionId: l.sessionId, isPR: l.isPR, loggedAt: l.loggedAt };
+    }
+  });
+  const points = Object.values(bySession).sort((a,b) => new Date(a.loggedAt) - new Date(b.loggedAt));
+  let svg = "", current = "—", delta = "", unit = State.units;
+  if (points.length === 0){
+    svg = `<div class="muted" style="text-align:center;padding:40px 0">No logged sets for ${esc(name)} yet.</div>`;
+  } else {
+    const targets = points.map(p => roundDisplay(convertWeight(p.weightLb, "lb", unit), unit));
+    const max = Math.max(...targets), min = Math.min(...targets);
+    const range = (max - min) || 1;
+    const xstep = points.length > 1 ? 280 / (points.length - 1) : 0;
+    const path = points.map((p, i) => `${i===0?'M':'L'} ${i*xstep} ${100 - ((targets[i]-min)/range)*90}`).join(" ");
+    const dots = points.map((p, i) => {
+      const x = i*xstep;
+      const y = 100 - ((targets[i]-min)/range)*90;
+      const isLast = i === points.length-1;
+      if (isLast) return `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)"/>`;
+      if (p.isPR) return `<circle cx="${x}" cy="${y}" r="2.5" fill="var(--ink)"/>`;
+      return "";
+    }).join("");
+    const lines = [0,30,60,90].map(y => `<line x1="0" y1="${y+5}" x2="280" y2="${y+5}" stroke="var(--line)" stroke-width="0.5" stroke-dasharray="2 3"/>`).join("");
+    svg = `<svg viewBox="0 0 280 120" preserveAspectRatio="none">${lines}<path d="${path}" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
+    const last = points[points.length-1];
+    current = `${roundDisplay(convertWeight(last.weightLb,"lb",unit),unit)}`;
+    if (points.length > 1){
+      const first = points[0];
+      const diff = roundDisplay(convertWeight(last.weightLb - first.weightLb, "lb", unit), unit);
+      delta = `${diff>=0?'+':''}${diff} ${unit} · ${points.length} sessions`;
+    }
+  }
+
+  // PR list
+  const prs = exLogs.filter(l => l.isPR).sort((a,b) => new Date(b.loggedAt) - new Date(a.loggedAt));
+  const prRows = prs.slice(0, 5).map(l => {
+    const w = renderWeightValueOnly(l.actual.weight, l.actual.weightUnits);
+    const e1rm = Math.round(toLb(l.actual.weight, l.actual.weightUnits) * (1 + l.actual.reps/30));
+    const e1rmDisp = roundDisplay(convertWeight(e1rm, "lb", State.units), State.units);
+    return `<div style="display:grid;grid-template-columns:auto 1fr auto;padding:12px 0;border-bottom:1px solid var(--line);align-items:center;gap:12px">
+      <span style="color:var(--accent)">${ICO.star}</span>
+      <div><div class="mono" style="font-size:14px;font-weight:600">${w} ${State.units} × ${l.actual.reps}</div><div class="mono" style="font-size:11px;color:var(--ink-3);margin-top:2px">${fmtDateShort(l.loggedAt.slice(0,10))}</div></div>
+      <span class="mono muted" style="font-size:11px">${e1rmDisp} e1RM</span>
+    </div>`;
+  }).join("") || `<div class="muted" style="padding:14px 0;font-size:13px">No PRs yet.</div>`;
+
+  return `<main class="scr">
+    <button class="back" data-action="back-to-exercise">${ICO.cleft}<span>${esc(name)}</span></button>
+    <div class="scrh hgroup">
+      <div><h1 class="h1">Progress</h1>
+      <div class="mono" style="font-size:12px;color:var(--ink-3);margin-top:4px;letter-spacing:0.06em">${esc(name).toUpperCase()} · ${points.length} SESSIONS</div></div>
+      <div class="right-stack">${unitToggle()}</div>
+    </div>
+    <div class="pillrow"><div class="pill on">Top set</div><div class="pill">Est. 1RM</div><div class="pill">Volume</div></div>
+    <div style="display:flex;justify-content:space-between;padding:0 0 8px"><div class="eyebrow mono">Current</div><div class="delta">${delta}</div></div>
+    <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px">
+      <span class="mono" style="font-size:36px;font-weight:700;letter-spacing:-0.025em">${current}</span>
+      <span class="mono muted" style="font-size:14px">${unit}${points.length?` × ${points[points.length-1].reps}`:''}</span>
+    </div>
+    <div class="spark">${svg}</div>
+    <div class="eyebrow" style="margin-bottom:8px">Personal records</div>
+    ${prRows}
+  </main>${tabBar('today')}`;
+}
+
+// ----- PROGRAM DETAIL (settings) -----
+function renderProgramDetail(id){
+  const p = State.programs.find(x => x.id === id);
+  if (!p) return renderLibrary();
+  const lifts = liftsNeedingOneRM(p);
+  const ormRows = lifts.map(name => {
+    const orm = p.oneRepMax?.[name];
+    const val = orm ? orm.value : null;
+    const units = orm ? orm.units : (p.json.units_default || "lb");
+    const dispVal = orm ? roundDisplay(convertWeight(val, units, State.units), State.units) : null;
+    const showVal = dispVal === null ? "—" : dispVal;
+    return `<div class="row">
+      <label>${esc(name)}</label>
+      <div style="display:flex;align-items:center;gap:6px">
+        <input type="number" inputmode="decimal" step="${State.units==='kg'?'0.5':'1'}" class="numinput" data-action="orm-edit" data-program="${p.id}" data-name="${esc(name)}" value="${dispVal===null?'':dispVal}" placeholder="—" style="min-width:80px">
+        <span class="mono muted" style="font-size:12px">${State.units}</span>
+        ${dispVal===null?'<button class="setpill" data-action="orm-edit-focus" data-program="'+p.id+'" data-name="'+esc(name)+'">Set</button>':''}
+      </div>
+    </div>`;
+  }).join("") || `<div class="muted" style="padding:14px 0;font-size:13px">This program has no percent-of-1RM exercises.</div>`;
+
+  const isActive = p.id === State.activeProgramId;
+  const actionRow = (() => {
+    if (isActive) return `<div class="btn-row" style="margin-top:4px"><button class="btn btn-ghost" data-action="restart-cycle" data-id="${p.id}">${ICO.skipfwd}<span>Restart cycle</span></button><button class="btn btn-danger-ghost" data-action="delete-program" data-id="${p.id}">${ICO.trash}<span>Delete program</span></button></div>`;
+    return `<div class="btn-row" style="margin-top:4px"><button class="btn btn-primary" data-action="make-active" data-id="${p.id}">${ICO.check}<span>Make active</span></button><button class="btn btn-danger-ghost" data-action="delete-program" data-id="${p.id}">${ICO.trash}<span>Delete program</span></button></div>`;
+  })();
+
+  return `<main class="scr">
+    <button class="back" data-action="nav" data-view="library">${ICO.cleft}<span>Programs</span></button>
+    <div class="scrh hgroup">
+      <div><h1 class="h1">${esc(p.name)}</h1>
+      <div class="mono" style="font-size:12px;color:var(--ink-3);margin-top:4px;letter-spacing:0.06em">${p.json.cycle_weeks || p.json.weeks.length}-WEEK · ${(p.json.description||'').slice(0,60).toUpperCase()}</div></div>
+      <div class="right-stack">${unitToggle()}</div>
+    </div>
+    ${lifts.length ? `<div class="eyebrow" style="margin-top:24px;margin-bottom:8px">One-rep maxes</div>${ormRows}` : ""}
+    <div class="eyebrow" style="margin-top:24px;margin-bottom:8px">Defaults</div>
+    <div class="row"><label>Default rest</label><span class="mono" style="font-size:14px;font-weight:600">3:00</span></div>
+    <div class="row"><label>Units</label><div class="uxtg" data-action="toggle-units"><span class="${State.units==='lb'?'on':''}">lb</span><span class="${State.units==='kg'?'on':''}">kg</span></div></div>
+    <div class="eyebrow" style="margin-top:24px;margin-bottom:8px">Program</div>
+    ${actionRow}
+    <div class="eyebrow" style="margin-top:24px;margin-bottom:8px">App</div>
+    <div class="btn-row"><button class="btn btn-ghost" data-action="export-data">${ICO.exp}<span>Export all data</span></button></div>
+    <div class="mono" style="font-size:10px;color:var(--ink-3);text-align:center;padding:20px 0 16px;letter-spacing:0.08em">VERSION 1.0.0 · LAST SYNC ${fmtDate(todayISO())}</div>
+  </main>`;
+}
+
+// ============================================================
+// Render dispatcher
+// ============================================================
+function render(){
+  const root = document.getElementById("app");
+  const v = State.view;
+  let html = "";
+  switch (v.name){
+    case "library": html = renderLibrary(); break;
+    case "today": html = renderToday(); break;
+    case "exercise": html = renderExercise(v.idx); break;
+    case "week": html = renderWeek(v.week); break;
+    case "history": html = renderHistory(v.monthOffset||0); break;
+    case "session": html = renderSession(v.id); break;
+    case "progress": html = renderProgress(v.name); break;
+    case "program": html = renderProgramDetail(v.id); break;
+    default: html = renderToday();
+  }
+  root.innerHTML = html;
+  // Restart timer interval if needed
+  if (State.activeSession && State.activeSession.restEndsAt && Date.now() < State.activeSession.restEndsAt && !State.restTimerInterval){
+    startRestTimer();
+  }
+}
+function navigate(view){ State.view = view; render(); }
+
+// ============================================================
+// Event handling (delegated)
+// ============================================================
+function esc(s){
+  if (s == null) return "";
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove("on"), 2000);
+}
+
+document.addEventListener("click", async (e) => {
+  const t = e.target.closest("[data-action]");
+  if (!t) return;
+  const a = t.dataset.action;
+
+  if (a === "nav"){ navigate({ name: t.dataset.view }); return; }
+  if (a === "toggle-units"){ State.units = State.units === "lb" ? "kg" : "lb"; await State.saveState(); render(); return; }
+
+  // Library
+  if (a === "open-program"){ navigate({ name: "program", id: t.dataset.id }); return; }
+  if (a === "make-active"){
+    const p = State.programs.find(x => x.id === t.dataset.id);
+    if (p){
+      // Set old active to paused
+      const old = State.activeProgram();
+      if (old){ old.status = "paused"; old.updatedAt = new Date().toISOString(); await dbPut("programs", old); }
+      p.status = "active"; p.updatedAt = new Date().toISOString();
+      if (!p.startDate) p.startDate = todayISO();
+      State.activeProgramId = p.id;
+      await dbPut("programs", p);
+      await State.saveState();
+      showToast(`${p.name} is now active`);
+      navigate({ name: "today" });
+    }
+    return;
+  }
+  if (a === "import-program"){ document.getElementById("filepicker").click(); return; }
+  if (a === "delete-program"){
+    if (!confirm("Delete this program and all its sessions?")) return;
+    const id = t.dataset.id;
+    await dbDel("programs", id);
+    State.programs = State.programs.filter(p => p.id !== id);
+    if (State.activeProgramId === id){ State.activeProgramId = null; State.activeSession = null; }
+    // Cascade: delete sessions and setLogs of this program
+    const sessIds = State.sessions.filter(s => s.programId === id).map(s => s.id);
+    for (const sid of sessIds){ await dbDel("sessions", sid); }
+    State.sessions = State.sessions.filter(s => s.programId !== id);
+    const lids = State.setLogs.filter(l => sessIds.includes(l.sessionId)).map(l => l.id);
+    for (const lid of lids){ await dbDel("setLogs", lid); }
+    State.setLogs = State.setLogs.filter(l => !sessIds.includes(l.sessionId));
+    await State.saveState();
+    showToast("Program deleted");
+    navigate({ name: "library" });
+    return;
+  }
+  if (a === "restart-cycle"){
+    if (!confirm("Restart this program from week 1?")) return;
+    const p = State.programs.find(x => x.id === t.dataset.id);
+    if (p){
+      p.cursor = { week: 1, dayIndex: 0 };
+      p.startDate = todayISO();
+      p.status = "active"; State.activeProgramId = p.id; State.activeSession = null;
+      await dbPut("programs", p); await State.saveState();
+      showToast("Cycle restarted"); navigate({ name: "today" });
+    }
+    return;
+  }
+
+  // Today / Exercise
+  if (a === "open-exercise"){
+    navigate({ name: "exercise", idx: parseInt(t.dataset.idx) });
+    return;
+  }
+  if (a === "open-week"){ navigate({ name: "week", week: parseInt(t.dataset.week) }); return; }
+  if (a === "open-progress"){ navigate({ name: "progress", name: t.dataset.name }); return; }
+  if (a === "back-to-exercise"){
+    if (State.activeSession?.currentExerciseIndex != null){ navigate({ name: "exercise", idx: State.activeSession.currentExerciseIndex }); }
+    else { navigate({ name: "today" }); }
+    return;
+  }
+  if (a === "log-set"){
+    const idx = parseInt(t.dataset.idx);
+    const exercises = State.exercisesForToday();
+    const ex = exercises[idx];
+    const sets = expandSets(ex);
+    const sIdx = State.activeSession?.completed?.[idx] || 0;
+    if (sIdx >= sets.length) return;
+    const wEl = document.getElementById("cur-weight");
+    const rEl = document.getElementById("cur-reps");
+    const w = parseFloat(wEl?.textContent) || 0;
+    const r = parseInt(rEl?.textContent) || 0;
+    if (!r){ showToast("Enter reps"); return; }
+    logSet(idx, sIdx, ex, sets[sIdx], { weight: w, reps: r });
+    render();
+    return;
+  }
+  if (a === "step"){
+    const id = t.dataset.target.split("-")[0];
+    const elId = id === "weight" ? "cur-weight" : "cur-reps";
+    const el = document.getElementById(elId);
+    const cur = parseFloat(el.textContent) || 0;
+    const by = parseFloat(t.dataset.by);
+    const next = Math.max(0, cur + by);
+    el.textContent = id === "weight" ? (next % 1 === 0 ? next : next.toFixed(1)) : Math.round(next);
+    return;
+  }
+  if (a === "mark-all-done"){
+    const idx = parseInt(t.dataset.idx);
+    if (!confirm("Log all remaining sets at the prescribed weight?")) return;
+    const ex = State.exercisesForToday()[idx];
+    const sets = expandSets(ex);
+    const p = State.activeProgram();
+    const startFrom = State.activeSession?.completed?.[idx] || 0;
+    for (let i = startFrom; i < sets.length; i++){
+      const s = sets[i];
+      const w = computeIntensityWeight(s.intensity, ex.name, p);
+      const wDisp = w ? roundDisplay(convertWeight(w.value, w.units, State.units), State.units) : 0;
+      const reps = Number.isFinite(s.reps) ? s.reps : (parseInt(s.reps) || 1);
+      logSet(idx, i, ex, s, { weight: wDisp, reps, markedAllDone: true });
+    }
+    State.activeSession.restEndsAt = null;
+    if (State.restTimerInterval){ clearInterval(State.restTimerInterval); State.restTimerInterval = null; }
+    showToast(`${ex.name} complete`);
+    navigate({ name: "today" });
+    return;
+  }
+  if (a === "rest-skip"){
+    if (State.activeSession){ State.activeSession.restEndsAt = null; State.saveState(); }
+    if (State.restTimerInterval){ clearInterval(State.restTimerInterval); State.restTimerInterval = null; }
+    render();
+    return;
+  }
+  if (a === "rest-add"){
+    if (State.activeSession?.restEndsAt){ State.activeSession.restEndsAt += 30000; }
+    return;
+  }
+  if (a === "finish-session"){
+    if (!State.activeSession){
+      // Just advance day with no logged sets
+      if (!confirm("Finish session with no sets logged? This won't be marked as a workout.")) return;
+      const p = State.activeProgram();
+      if (p){
+        const wks = p.json.weeks;
+        if (p.cursor.dayIndex < (wks[p.cursor.week-1]?.days?.length||0)-1) p.cursor.dayIndex++;
+        else if (p.cursor.week < wks.length){ p.cursor.week++; p.cursor.dayIndex = 0; }
+        else p.status = "completed";
+        await dbPut("programs", p);
+      }
+      navigate({ name: "today" });
+      return;
+    }
+    await finishSession("logged");
+    showToast("Session saved");
+    navigate({ name: "today" });
+    return;
+  }
+  if (a === "today-more"){
+    showActionSheet([
+      { label: "Add session note", action: () => editSessionNotePrompt() },
+      { label: "Skip session", danger: true, action: () => skipSession() }
+    ]);
+    return;
+  }
+  if (a === "add-exercise"){
+    showAdHocExerciseModal();
+    return;
+  }
+
+  // Calendar
+  if (a === "cal-month"){
+    const cur = State.view.monthOffset || 0;
+    State.view = { name: "history", monthOffset: cur + parseInt(t.dataset.by) };
+    render();
+    return;
+  }
+  if (a === "cal-select"){
+    State._selDate = t.dataset.date;
+    render();
+    return;
+  }
+  if (a === "open-session"){ navigate({ name: "session", id: t.dataset.id }); return; }
+  if (a === "delete-session"){
+    if (!confirm("Delete this session?")) return;
+    const id = t.dataset.id;
+    await dbDel("sessions", id);
+    State.sessions = State.sessions.filter(s => s.id !== id);
+    const lids = State.setLogs.filter(l => l.sessionId === id).map(l => l.id);
+    for (const lid of lids){ await dbDel("setLogs", lid); }
+    State.setLogs = State.setLogs.filter(l => l.sessionId !== id);
+    showToast("Session deleted");
+    navigate({ name: "history" });
+    return;
+  }
+  if (a === "edit-session-notes"){
+    const id = t.dataset.id;
+    const s = State.sessions.find(x => x.id === id);
+    const cur = s?.notes || "";
+    showInputModal("Session notes", cur, async (val) => {
+      s.notes = val; await dbPut("sessions", s); render(); showToast("Notes saved");
+    }, true);
+    return;
+  }
+  if (a === "export-data"){
+    const data = { programs: State.programs, sessions: State.sessions, setLogs: State.setLogs, units: State.units, exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a2 = document.createElement("a");
+    a2.href = url; a2.download = `workouts-export-${todayISO()}.json`;
+    document.body.appendChild(a2); a2.click(); a2.remove();
+    URL.revokeObjectURL(url);
+    return;
+  }
+  if (a === "modal-close"){ closeModal(); return; }
+  if (a === "todo-trends"){ showToast("Trends — coming in v2"); return; }
+});
+
+// ORM input change
+document.addEventListener("change", async (e) => {
+  const t = e.target;
+  if (t.dataset.action === "orm-edit"){
+    const program = State.programs.find(p => p.id === t.dataset.program);
+    if (!program) return;
+    const v = parseFloat(t.value);
+    program.oneRepMax = program.oneRepMax || {};
+    if (Number.isFinite(v) && v > 0){
+      // Always store in the units the user is currently viewing
+      program.oneRepMax[t.dataset.name] = { value: v, units: State.units };
+    } else {
+      delete program.oneRepMax[t.dataset.name];
+    }
+    program.updatedAt = new Date().toISOString();
+    await dbPut("programs", program);
+    showToast(`${t.dataset.name} 1RM ${Number.isFinite(v)?'set to '+v+' '+State.units:'cleared'}`);
+    render();
+  }
+});
+
+// File picker
+document.getElementById("filepicker").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const json = JSON.parse(text);
+    if (!validateProgram(json)){ showToast("Invalid program JSON"); return; }
+    const id = uuid();
+    const orm = {};
+    if (json.one_rep_max){
+      Object.entries(json.one_rep_max).forEach(([k,v]) => {
+        orm[k] = { value: v, units: json.units_default || "lb" };
+      });
+    }
+    const prog = {
+      id, name: json.name || "Untitled", json,
+      oneRepMax: orm,
+      status: "paused",
+      cursor: { week: 1, dayIndex: 0 },
+      startDate: todayISO(),
+      importedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    await dbPut("programs", prog);
+    State.programs.push(prog);
+    if (confirm(`Imported "${prog.name}". Make it the active program?`)){
+      const old = State.activeProgram();
+      if (old){ old.status = "paused"; await dbPut("programs", old); }
+      prog.status = "active"; State.activeProgramId = id;
+      await dbPut("programs", prog);
+      await State.saveState();
+      navigate({ name: "today" });
+    } else {
+      render();
+    }
+  } catch (err){
+    showToast("Could not parse JSON");
+    console.error(err);
+  } finally {
+    e.target.value = "";
+  }
+});
+
+function validateProgram(j){
+  if (!j || typeof j !== "object") return false;
+  if (!Array.isArray(j.weeks) || j.weeks.length === 0) return false;
+  for (const w of j.weeks){
+    if (!Array.isArray(w.days)) return false;
+    for (const d of w.days){
+      if (!Array.isArray(d.exercises)) return false;
+    }
+  }
+  return true;
+}
+
+// ============================================================
+// Modals (action sheet, input)
+// ============================================================
+function closeModal(){ document.getElementById("modal").classList.remove("on"); }
+function showModalContent(html){
+  document.getElementById("modalsheet").innerHTML = html;
+  document.getElementById("modal").classList.add("on");
+}
+function showActionSheet(items){
+  const html = `<div style="display:grid;gap:8px">
+    ${items.map((it, i) => `<button class="btn ${it.danger?'btn-danger-ghost':'btn-ghost'}" data-action="modal-action" data-i="${i}">${esc(it.label)}</button>`).join("")}
+    <button class="btn btn-soft" data-action="modal-close">Cancel</button>
+  </div>`;
+  showModalContent(html);
+  document.getElementById("modalsheet").addEventListener("click", function handler(e){
+    const b = e.target.closest("[data-action='modal-action']");
+    if (!b) return;
+    const i = parseInt(b.dataset.i);
+    closeModal();
+    if (items[i].action) items[i].action();
+  }, { once: true });
+}
+function showInputModal(title, initial, onSave, multiline){
+  const html = `<h3 class="modalh">${esc(title)}</h3>
+    <div class="field">${multiline?`<textarea rows="5" id="inp">${esc(initial||'')}</textarea>`:`<input type="text" id="inp" value="${esc(initial||'')}">`}</div>
+    <div class="btn-row split"><button class="btn btn-soft" data-action="modal-close">Cancel</button><button class="btn btn-primary" id="msave">${ICO.check}<span>Save</span></button></div>`;
+  showModalContent(html);
+  setTimeout(() => document.getElementById("inp")?.focus(), 50);
+  document.getElementById("msave").addEventListener("click", () => {
+    const v = document.getElementById("inp").value;
+    closeModal();
+    onSave(v);
+  });
+}
+function showAdHocExerciseModal(){
+  const html = `<h3 class="modalh">Add exercise</h3>
+    <div class="field"><label>Name</label><input type="text" id="ah-name" placeholder="e.g., Lateral Raise"></div>
+    <div class="field" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div><label>Sets</label><input type="number" inputmode="numeric" id="ah-sets" value="3"></div><div><label>Reps</label><input type="number" inputmode="numeric" id="ah-reps" value="10"></div><div><label>Weight (${State.units})</label><input type="number" inputmode="decimal" id="ah-weight" placeholder="—"></div></div>
+    <div class="btn-row split"><button class="btn btn-soft" data-action="modal-close">Cancel</button><button class="btn btn-primary" id="ah-save">${ICO.plus}<span>Add</span></button></div>`;
+  showModalContent(html);
+  setTimeout(() => document.getElementById("ah-name")?.focus(), 50);
+  document.getElementById("ah-save").addEventListener("click", () => {
+    const name = document.getElementById("ah-name").value.trim();
+    const sets = parseInt(document.getElementById("ah-sets").value);
+    const reps = parseInt(document.getElementById("ah-reps").value);
+    const w = parseFloat(document.getElementById("ah-weight").value);
+    if (!name || !sets){ showToast("Name and sets required"); return; }
+    const sess = ensureActiveSession();
+    sess.adhocExercises = sess.adhocExercises || [];
+    sess.adhocExercises.push({
+      name, sets, reps,
+      intensity: Number.isFinite(w) ? { weight: w, units: State.units } : { bodyweight: true }
+    });
+    State.saveState();
+    closeModal();
+    render();
+    showToast(`Added ${name}`);
+  });
+}
+function editSessionNotePrompt(){
+  const sess = ensureActiveSession();
+  if (!sess) return;
+  showInputModal("Session note", sess.notes || "", (v) => {
+    sess.notes = v; State.saveState(); showToast("Note saved");
+  }, true);
+}
+async function skipSession(){
+  if (!confirm("Skip today's session? It will be marked skipped on the calendar.")) return;
+  const p = State.activeProgram();
+  const day = State.todaysDay();
+  const session = {
+    id: uuid(), programId: p.id, programWeek: p.cursor.week, programDay: day?.day || null,
+    date: todayISO(), status: "skipped",
+    startedAt: new Date().toISOString(), endedAt: new Date().toISOString(), notes: ""
+  };
+  await dbPut("sessions", session);
+  State.sessions.push(session);
+  // Advance cursor
+  const wks = p.json.weeks;
+  if (p.cursor.dayIndex < (wks[p.cursor.week-1]?.days?.length||0)-1) p.cursor.dayIndex++;
+  else if (p.cursor.week < wks.length){ p.cursor.week++; p.cursor.dayIndex = 0; }
+  else p.status = "completed";
+  await dbPut("programs", p);
+  State.activeSession = null;
+  await State.saveState();
+  showToast("Session skipped");
+  navigate({ name: "today" });
+}
+
+// Backdrop close
+document.getElementById("modal").addEventListener("click", (e) => {
+  if (e.target.id === "modal") closeModal();
+});
+
+// ============================================================
+// Init
+// ============================================================
+async function init(){
+  await openDB();
+  await State.load();
+  if (State.programs.length === 0){
+    await preloadSample();
+  }
+  if (!State.activeProgramId && State.programs[0]){
+    State.activeProgramId = State.programs[0].id;
+    await State.saveState();
+  }
+  // Initial view: Today if there's an active program, else Library
+  State.view = State.activeProgramId ? { name: "today" } : { name: "library" };
+  render();
+  // Register service worker (only over https / localhost)
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){
+    try { await navigator.serviceWorker.register("./sw.js"); } catch(e){ console.warn("SW failed", e); }
+  }
+}
+init().catch(err => {
+  document.getElementById("app").innerHTML = `<main class="scr"><div class="empty"><div class="h3">Error starting app</div><pre style="text-align:left;font-size:11px;color:var(--ink-3);overflow:auto">${esc(err.stack || err.message)}</pre></div></main>`;
+});
+</script>
+</body>
+</html>
