@@ -1,5 +1,5 @@
 // Workouts service worker — cache-first for the shell, network-first for everything else.
-const CACHE = "workouts-v1";
+const CACHE = "workouts-v3";
 const ASSETS = [
   "./",
   "./index.html",

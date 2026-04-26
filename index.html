@@ -50,7 +50,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .card.tap:active{background:var(--paper-2)}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:12px;font-size:15px;font-weight:600;letter-spacing:-0.005em;border:1px solid transparent;cursor:pointer;font-family:inherit;width:100%}
 .btn:active{transform:scale(0.98)}
-.btn-primary{background:var(--ink);color:#fff}
+.btn-primary{background:var(--accent);color:#fff}
 .btn-ghost{border-color:var(--line-2);color:var(--ink);background:var(--paper)}
 .btn-soft{background:var(--paper-2);color:var(--ink);border-color:var(--line)}
 .btn-danger-ghost{border-color:var(--line-2);color:var(--danger);background:var(--paper)}
@@ -64,6 +64,78 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 .uxtg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;font-size:11px;font-family:'JetBrains Mono',ui-monospace,monospace;height:26px;letter-spacing:0.04em;cursor:pointer}
 .uxtg span{padding:0 10px;display:flex;align-items:center;font-weight:500;color:var(--ink-3)}
 .uxtg span.on{background:var(--ink);color:#fff;font-weight:600}
+.uxtg.compact{height:22px;font-size:10px;letter-spacing:0.06em}
+.uxtg.compact span{padding:0 8px}
+.weekstrip{display:flex;gap:6px;padding:10px 0 4px;align-items:stretch}
+.weekstrip .navbtn{flex:0 0 28px;display:grid;place-items:center;border-radius:8px;color:var(--ink-3);cursor:pointer;border:0;background:transparent}
+.weekstrip .navbtn:active{background:var(--paper-2)}
+.weekstrip .navbtn[disabled]{opacity:0.3;cursor:default}
+.weekstrip .navbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.weekstrip .pills{flex:1;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+.daypill{padding:10px 6px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid var(--line);background:var(--paper);transition:transform 0.1s}
+.daypill:active{transform:scale(0.97)}
+.daypill .dn{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:600;letter-spacing:0.1em;color:var(--ink-3);text-transform:uppercase;line-height:1}
+.daypill .dl{font-size:11px;font-weight:500;color:var(--ink);margin-top:5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.daypill.done{background:var(--good-soft);border-color:transparent}
+.daypill.done .dn{color:var(--good)}
+.daypill.done .dl{color:var(--good)}
+.daypill.skipped{background:var(--warn-soft);border-color:transparent}
+.daypill.skipped .dn{color:var(--warn)}
+.daypill.skipped .dl{color:var(--warn)}
+.daypill.today{background:var(--accent);border-color:var(--accent)}
+.daypill.today .dn{color:#fff;opacity:0.7}
+.daypill.today .dl{color:#fff}
+.daypill.sel:not(.today){border-color:var(--accent);border-width:1.5px;background:var(--accent-soft)}
+.daypill.sel:not(.today) .dn{color:var(--accent)}
+.daypill.sel:not(.today) .dl{color:var(--accent)}
+.daypill.future .dl{color:var(--ink-2)}
+.exrcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px 12px;margin-bottom:8px;cursor:pointer}
+.exrcard.cur{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-soft) 0%,var(--paper) 50%)}
+.exrcard.done{background:var(--good-soft);border-color:transparent}
+.exrcard .head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.exrcard .nm{font-size:16px;font-weight:600;letter-spacing:-0.01em;color:var(--ink)}
+.exrcard.done .nm{color:var(--good)}
+.exrcard .ct{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;font-size:13px;color:var(--ink-3);font-weight:500}
+.exrcard .ct b{color:var(--ink);font-weight:600}
+.exrcard.done .ct{color:var(--good);opacity:0.85}
+.exrcard.done .ct b{color:var(--good)}
+.exrcard .bignum{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:24px;font-weight:600;letter-spacing:-0.02em;line-height:1.1;color:var(--ink);margin-top:6px;font-variant-numeric:tabular-nums}
+.exrcard.done .bignum{color:var(--good)}
+.exrcard .meta{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:var(--ink-2);margin-top:4px;font-variant-numeric:tabular-nums}
+.exrcard.done .meta{color:var(--good);opacity:0.85}
+.exrcard .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.exrcard .donebtn{font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;border:1px solid var(--line-2);background:transparent;color:var(--ink);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
+.exrcard .donebtn:active{background:var(--paper-2)}
+.exrcard .donebtn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.exrcard.done .donebtn{background:var(--good);color:#fff;border-color:var(--good)}
+.exrcard .setbar{flex:1;margin:0}
+.skiplnk{display:block;text-align:center;font-size:13px;color:var(--ink-3);padding:8px 0;cursor:pointer;background:transparent;border:0;font-family:inherit;font-weight:500;width:100%}
+.skiplnk:active{color:var(--ink)}
+.preview{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:var(--paper-2);font-size:12px;color:var(--ink-3);margin-bottom:12px;border:1px solid var(--line)}
+.preview .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ink-3)}
+.titlerow{display:flex;align-items:center;gap:8px}
+.titlerow button{flex:0 0 32px;height:32px;display:grid;place-items:center;border:0;background:transparent;color:var(--ink-3);border-radius:8px;cursor:pointer}
+.titlerow button:active{background:var(--paper-2)}
+.titlerow button[disabled]{opacity:0.3;cursor:default}
+.titlerow button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.titlerow .center{flex:1;text-align:center}
+.titlerow .h2{margin:0}
+.daycontent{animation:none}
+.daycontent.anim{animation:dayfade 260ms cubic-bezier(.25,.46,.45,.94)}
+@keyframes dayfade{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.daycontent.anim-back{animation:dayfade-back 260ms cubic-bezier(.25,.46,.45,.94)}
+@keyframes dayfade-back{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+.weekpill{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:0.06em;border-radius:999px;cursor:pointer;font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;text-transform:uppercase;margin-left:auto}
+.weekpill:active{filter:brightness(0.95)}
+.weekpill svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.notesarea{padding:10px 0 4px;display:flex;align-items:center;gap:8px;font-size:13px}
+.notesarea .ico{flex:0 0 18px;color:var(--ink-3)}
+.notesarea .ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.notesarea .text{flex:1;color:var(--ink-2);font-style:italic;cursor:pointer}
+.notesarea .text.empty{color:var(--ink-3);font-style:normal}
+.notesarea .text.empty:active{color:var(--ink)}
+.calday.today{background:var(--accent);color:#fff}
+.calday.sel{background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent)}
 .pill{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:500;text-align:center;border:1px solid var(--line);color:var(--ink-3);cursor:pointer;background:var(--paper)}
 .pill.on{background:var(--ink);color:#fff;font-weight:600;border-color:var(--ink)}
 .pill-sq{border-radius:8px}
@@ -640,6 +712,9 @@ const ICO = {
 // ============================================================
 // Renderers
 // ============================================================
+// Tracks last shown day for transition animations across renderToday/renderDayView
+let lastDayKey = null;
+
 function tabBar(active){
   return `<nav class="tabbar">
     <button class="tab ${active==='programs'?'on':''}" data-action="nav" data-view="library">${ICO.programs}<span>Programs</span></button>
@@ -648,7 +723,7 @@ function tabBar(active){
   </nav>`;
 }
 function unitToggle(){
-  return `<div class="uxtg" data-action="toggle-units">
+  return `<div class="uxtg compact" data-action="toggle-units">
     <span class="${State.units==='lb'?'on':''}">lb</span>
     <span class="${State.units==='kg'?'on':''}">kg</span>
   </div>`;
@@ -691,19 +766,18 @@ function renderLibrary(){
       </div>
     </div>`;
   }).join("");
-  const empty = programs.length === 0 ? `<div class="empty"><div class="h3">No programs yet</div><div>Import a workout JSON to get started.</div></div>` : "";
+  const empty = programs.length === 0 ? `<div class="empty" style="padding:60px 20px"><div class="h3" style="margin-bottom:6px">No programs yet</div><div style="margin-bottom:18px">Tap + above to import a workout JSON.</div><button class="btn btn-primary" data-action="import-program" style="display:inline-flex;width:auto;padding:14px 22px">${ICO.imp}<span>Import program</span></button></div>` : "";
   return `<main class="scr">
     <div class="scrh hgroup">
       <div><h1 class="h1">Programs</h1></div>
       <div class="right" style="padding-top:6px">
-        <button class="iconbtn" data-action="import-program" title="Import">${ICO.plus}</button>
+        <button class="iconbtn" data-action="import-program" title="Import program">${ICO.plus}</button>
       </div>
     </div>
     <div class="scrsub"><span>${programs.length} imported</span><span class="dot"></span><span>${active.length} active</span></div>
     ${cardActive}
     ${cardOthers}
     ${empty}
-    <div class="dashbox" data-action="import-program" style="margin-top:8px">${ICO.imp}<span>Import program (.json)</span></div>
   </main>${tabBar('programs')}`;
 }
 
@@ -713,7 +787,7 @@ function renderToday(){
   if (!p){
     return `<main class="scr">
       <div class="empty"><div class="h3">No active program</div><div>Pick or import one to start training.</div>
-        <div style="margin-top:16px"><button class="btn btn-primary" data-action="nav" data-view="library">Go to Programs</button></div>
+        <div style="margin-top:16px"><button class="btn btn-primary" data-action="nav" data-view="library" style="display:inline-flex;width:auto;padding:14px 22px">Go to Programs</button></div>
       </div>
     </main>${tabBar('today')}`;
   }
@@ -726,67 +800,229 @@ function renderToday(){
   if (!day){ return `<main class="scr"><div class="empty">No day data.</div></main>${tabBar('today')}`; }
   const exercises = State.exercisesForToday();
   const sess = State.activeSession;
+  const hasNote = sess && sess.notes;
+
+  // Week strip: render all days of the current week as pills
+  const wkDays = (p.json.weeks[p.cursor.week-1] && p.json.weeks[p.cursor.week-1].days) || [];
+  const dayPills = wkDays.map((d, di) => {
+    let cls = "daypill";
+    if (di === p.cursor.dayIndex) cls += " today sel";
+    else if (di < p.cursor.dayIndex) cls += " done";
+    else cls += " future";
+    const labelText = d.label || `Day ${d.day}`;
+    // Compute % done for past days (visual nicety)
+    return `<div class="${cls}" data-action="${di===p.cursor.dayIndex?'noop':'open-day-view'}" data-week="${p.cursor.week}" data-day-index="${di}">
+      <div class="dn">DAY ${d.day}${di < p.cursor.dayIndex ? ' ✓' : ''}</div>
+      <div class="dl">${esc(labelText)}</div>
+    </div>`;
+  }).join("");
+
+  // Prev/next day arrows — navigate to Day view, may cross week boundaries
+  const totalWks = p.json.weeks.length;
+  const hasPrev = p.cursor.week > 1 || p.cursor.dayIndex > 0;
+  const hasNext = (p.cursor.week < totalWks) || (p.cursor.dayIndex < wkDays.length - 1);
 
   const cards = exercises.map((ex, idx) => {
     const sets = expandSets(ex);
     const total = sets.length;
-    const done = (sess && sess.completed[idx]) || 0;
+    const doneSets = (sess && sess.completed[idx]) || 0;
     const isCurrent = sess && sess.currentExerciseIndex === idx;
-    const segs = sets.map((_, i) => `<i class="${i < done ? 'done' : (i === done ? 'cur' : '')}"></i>`).join("");
-    const intensityHTML = ex.intensity ? renderIntensity(ex.intensity, ex.name, p) : "";
-    const totalReps = (typeof ex.reps !== "undefined") ? `${total} × ${renderRepsForSet({reps:ex.reps})}` : `${total} sets`;
-    let line2;
+    const fullyDone = doneSets >= total;
+    const segs = sets.map((_, i) => `<i class="${i < doneSets ? 'done' : (i === doneSets ? 'cur' : '')}"></i>`).join("");
+
+    // Compute the "big number" — sets × reps
+    let bigNum;
     if (Array.isArray(ex.sets)){
-      // Per-set display: show range of intensities
+      const allReps = sets.every(s => s.reps === sets[0].reps) ? sets[0].reps : null;
+      bigNum = allReps !== null ? `${total} × ${renderRepsForSet({reps:allReps})}` : `${total} sets`;
+    } else {
+      bigNum = (typeof ex.reps !== "undefined") ? `${total} × ${renderRepsForSet({reps:ex.reps})}` : `${total} sets`;
+    }
+
+    // Compute the meta line — intensity / weight info
+    let meta = "";
+    if (Array.isArray(ex.sets)){
       const pcts = sets.map(s => s.intensity?.percent_1rm).filter(x=>x);
       if (pcts.length){
         const lo = Math.min(...pcts), hi = Math.max(...pcts);
         const rangeStr = lo === hi ? `${lo}%` : `${lo}–${hi}%`;
-        line2 = `${total} × varied · <b>${rangeStr}</b>`;
-      } else {
-        const w = computeIntensityWeight(sets[0].intensity, ex.name, p);
-        line2 = `${total} sets · ${w ? `<b style="color:var(--ink)">${roundDisplay(convertWeight(w.value,w.units,State.units),State.units)} ${State.units}</b>` : intensityHTML}`;
+        // Compute weight range
+        const orm = p.oneRepMax?.[ex.name];
+        if (orm){
+          const wLo = roundDisplay(convertWeight(orm.value * lo / 100, orm.units, State.units), State.units);
+          const wHi = roundDisplay(convertWeight(orm.value * hi / 100, orm.units, State.units), State.units);
+          meta = `${rangeStr} · ${wLo===wHi?wLo:wLo+'–'+wHi} ${State.units}`;
+        } else {
+          meta = `${rangeStr} · — ${State.units}`;
+        }
+      } else if (sets[0].intensity){
+        meta = renderIntensity(sets[0].intensity, ex.name, p).replace(/<\/?b[^>]*>/g, "");
       }
-    } else {
-      line2 = `${totalReps}${intensityHTML ? ' · ' + intensityHTML : ''}`;
+    } else if (ex.intensity){
+      meta = renderIntensity(ex.intensity, ex.name, p).replace(/<\/?b[^>]*>/g, "");
     }
+
     const missing = Array.isArray(ex.sets)
       ? sets.some(s => s.intensity?.percent_1rm) && !p.oneRepMax?.[ex.name]
       : (ex.intensity?.percent_1rm && !p.oneRepMax?.[ex.name]);
-    const setMsg = missing ? `<button class="setpill" data-action="open-program" data-id="${p.id}">Set 1RM ›</button>` : "";
-    return `<div class="card ${isCurrent ? 'accent' : ''} tap" data-action="open-exercise" data-idx="${idx}" style="margin-bottom:8px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <div class="h3">${esc(ex.name)}</div>
-          <div class="mono" style="font-size:12px;color:var(--ink-2);margin-top:4px">${line2}${setMsg}</div>
-        </div>
-        <div class="mono" style="font-size:13px;color:var(--ink-3)"><b style="color:var(--ink);font-weight:600">${done}</b>/${total}</div>
+    const setMsg = missing ? ` <button class="setpill" data-action="open-program" data-id="${p.id}">Set 1RM ›</button>` : "";
+
+    const cls = `exrcard ${isCurrent ? 'cur' : ''} ${fullyDone ? 'done' : ''}`;
+    const doneLabel = fullyDone ? `<svg viewBox="0 0 24 24"><polyline points="5 12 10 17 19 7"/></svg> Done` : `Done`;
+    return `<div class="${cls}" data-action="open-exercise" data-idx="${idx}">
+      <div class="head">
+        <div class="nm">${esc(ex.name)}</div>
+        <div class="ct"><b>${doneSets}</b>/${total}</div>
       </div>
-      <div class="setbar">${segs}</div>
+      <div class="bignum">${bigNum}</div>
+      ${meta ? `<div class="meta">${meta}${setMsg}</div>` : (setMsg ? `<div class="meta">${setMsg}</div>` : '')}
+      <div class="foot">
+        <div class="setbar">${segs}</div>
+        <button class="donebtn" data-action="exercise-done" data-idx="${idx}" data-stop="1">${doneLabel}</button>
+      </div>
     </div>`;
   }).join("");
+
+  // Animation: detect day-change to apply transition
+  const dayKey = `today:${p.cursor.week}:${p.cursor.dayIndex}`;
+  const animClass = (lastDayKey && lastDayKey !== dayKey) ? "anim" : "";
+  const animDir = (lastDayKey && lastDayKey > dayKey) ? "anim-back" : animClass;
+  lastDayKey = dayKey;
+
+  const noteText = hasNote ? esc(sess.notes) : "";
+  const notesHTML = hasNote
+    ? `<div class="notesarea"><div class="ico">${ICO.note}</div><div class="text" data-action="edit-active-note">${noteText}</div></div>`
+    : `<div class="notesarea"><div class="ico">${ICO.note}</div><div class="text empty" data-action="edit-active-note">+ Add session note</div></div>`;
 
   return `<main class="scr">
     <div class="scrh hgroup">
       <div><h1 class="h1">Today</h1></div>
-      <div class="right-stack">
-        <div class="mono nowrap" style="font-size:13px;color:var(--ink-3);font-weight:500">${fmtToday()}</div>
-        ${unitToggle()}
+      <div class="right" style="padding-top:6px">
+        <div class="uxtg compact" data-action="toggle-units"><span class="${State.units==='lb'?'on':''}">lb</span><span class="${State.units==='kg'?'on':''}">kg</span></div>
       </div>
     </div>
     <div class="scrsub">
-      <span>${esc(p.name)}</span><span class="dot"></span>
-      <span>Wk ${p.cursor.week} · D${p.cursor.dayIndex+1}</span>
-      ${day.label ? `<span class="dot"></span><span>${esc(day.label)}</span>` : ''}
-      <button class="setpill" data-action="open-week" data-week="${p.cursor.week}" style="margin-left:auto">Week ›</button>
+      <span class="mono" style="font-size:12px;letter-spacing:0.06em">${fmtToday()}</span><span class="dot"></span>
+      <span>${esc(p.name)}</span>
+      <button class="weekpill" data-action="open-week" data-week="${p.cursor.week}">Wk ${p.cursor.week} / ${totalWks} ${ICO.cright}</button>
     </div>
-    ${cards}
-    <div class="btn-row" style="padding:16px 0">
-      <button class="btn btn-primary" data-action="finish-session">${ICO.check}<span>Finish session</span></button>
-      <div class="btn-row split">
+    <div class="weekstrip">
+      <button class="navbtn" data-action="step-day" data-by="-1" ${!hasPrev?'disabled':''}>${ICO.cleft}</button>
+      <div class="pills">${dayPills}</div>
+      <button class="navbtn" data-action="step-day" data-by="1" ${!hasNext?'disabled':''}>${ICO.cright}</button>
+    </div>
+    <div class="daycontent ${animDir}">
+      ${day.label?`<div style="font-size:14px;font-weight:600;color:var(--accent);margin:18px 0 10px;letter-spacing:-0.01em">${esc(day.label)}</div>`:'<div style="height:10px"></div>'}
+      ${cards}
+      ${notesHTML}
+      <div class="btn-row" style="padding:14px 0 4px;gap:8px">
         <button class="btn btn-ghost" data-action="add-exercise">${ICO.plus}<span>Add exercise</span></button>
-        <button class="btn btn-ghost" data-action="today-more">${ICO.more}<span>More</span></button>
+        <button class="btn btn-primary" data-action="finish-session">${ICO.check}<span>Finish session</span></button>
       </div>
+      <button class="skiplnk" data-action="skip-session">Skip today</button>
+    </div>
+  </main>${tabBar('today')}`;
+}
+
+// ----- DAY VIEW (read-only preview of any non-today day in the active program) -----
+function renderDayView(week, dayIndex){
+  const p = State.activeProgram();
+  if (!p) return renderToday();
+  const wkObj = p.json.weeks[week-1];
+  if (!wkObj) return renderToday();
+  const day = wkObj.days[dayIndex];
+  if (!day) return renderToday();
+  const totalWks = p.json.weeks.length;
+
+  // Determine prev/next across week boundaries
+  function neighbor(direction){
+    let w = week, di = dayIndex + direction;
+    if (di < 0){
+      if (w <= 1) return null;
+      w--;
+      di = (p.json.weeks[w-1].days.length || 1) - 1;
+    } else if (di >= wkObj.days.length){
+      if (w >= totalWks) return null;
+      w++; di = 0;
+    }
+    return { w, di };
+  }
+  const prev = neighbor(-1), next = neighbor(1);
+
+  // Highlight which day in the week strip is currently selected
+  const dayPills = wkObj.days.map((d, di) => {
+    let cls = "daypill";
+    if (week === p.cursor.week && di === p.cursor.dayIndex) cls += " today";
+    else if (week < p.cursor.week || (week === p.cursor.week && di < p.cursor.dayIndex)) cls += " done";
+    else cls += " future";
+    if (di === dayIndex) cls += " sel";
+    return `<div class="${cls}" data-action="open-day-view" data-week="${week}" data-day-index="${di}">
+      <div class="dn">DAY ${d.day}</div>
+      <div class="dl">${esc(d.label || `Day ${d.day}`)}</div>
+    </div>`;
+  }).join("");
+
+  // Read-only exercise list
+  const cards = (day.exercises || []).map((ex) => {
+    const sets = expandSets(ex);
+    const total = sets.length;
+    let bigNum;
+    if (Array.isArray(ex.sets)){
+      const allReps = sets.every(s => s.reps === sets[0].reps) ? sets[0].reps : null;
+      bigNum = allReps !== null ? `${total} × ${renderRepsForSet({reps:allReps})}` : `${total} sets`;
+    } else {
+      bigNum = (typeof ex.reps !== "undefined") ? `${total} × ${renderRepsForSet({reps:ex.reps})}` : `${total} sets`;
+    }
+    let meta = "";
+    if (Array.isArray(ex.sets)){
+      const pcts = sets.map(s => s.intensity?.percent_1rm).filter(x=>x);
+      if (pcts.length){
+        const lo = Math.min(...pcts), hi = Math.max(...pcts);
+        const rangeStr = lo === hi ? `${lo}%` : `${lo}–${hi}%`;
+        const orm = p.oneRepMax?.[ex.name];
+        if (orm){
+          const wLo = roundDisplay(convertWeight(orm.value * lo / 100, orm.units, State.units), State.units);
+          const wHi = roundDisplay(convertWeight(orm.value * hi / 100, orm.units, State.units), State.units);
+          meta = `${rangeStr} · ${wLo===wHi?wLo:wLo+'–'+wHi} ${State.units}`;
+        } else {
+          meta = `${rangeStr} · — ${State.units}`;
+        }
+      } else if (sets[0].intensity){
+        meta = renderIntensity(sets[0].intensity, ex.name, p).replace(/<\/?b[^>]*>/g, "");
+      }
+    } else if (ex.intensity){
+      meta = renderIntensity(ex.intensity, ex.name, p).replace(/<\/?b[^>]*>/g, "");
+    }
+    return `<div class="exrcard">
+      <div class="head"><div class="nm">${esc(ex.name)}</div></div>
+      <div class="bignum">${bigNum}</div>
+      ${meta ? `<div class="meta">${meta}</div>` : ''}
+    </div>`;
+  }).join("");
+
+  const isToday = week === p.cursor.week && dayIndex === p.cursor.dayIndex;
+
+  // Animation
+  const dayKey = `day:${week}:${dayIndex}`;
+  const animClass = (lastDayKey && lastDayKey !== dayKey) ? "anim" : "";
+  const animDir = (lastDayKey && lastDayKey > dayKey) ? "anim-back" : animClass;
+  lastDayKey = dayKey;
+
+  return `<main class="scr">
+    <button class="back" data-action="nav" data-view="today">${ICO.cleft}<span>Today</span></button>
+    <div class="titlerow" style="margin-top:4px">
+      <button data-action="open-day-view" data-week="${prev?prev.w:''}" data-day-index="${prev?prev.di:''}" ${!prev?'disabled':''}>${ICO.cleft}</button>
+      <div class="center"><div class="h1">${isToday ? 'Today' : `Day ${day.day}`}</div>${day.label?`<div style="font-size:13px;color:var(--accent);margin-top:2px;font-weight:500">${esc(day.label)}</div>`:''}</div>
+      <button data-action="open-day-view" data-week="${next?next.w:''}" data-day-index="${next?next.di:''}" ${!next?'disabled':''}>${ICO.cright}</button>
+    </div>
+    <div class="scrsub" style="padding:14px 0 4px"><span>${esc(p.name)}</span><button class="weekpill" data-action="open-week" data-week="${week}">Wk ${week} / ${totalWks} ${ICO.cright}</button></div>
+    <div class="weekstrip">
+      <div class="pills">${dayPills}</div>
+    </div>
+    <div class="daycontent ${animDir}">
+      ${!isToday?`<div class="preview"><span class="dot"></span>Preview · this isn't today</div>`:''}
+      ${cards}
+      ${isToday ? `<div style="padding:16px 0"><button class="btn btn-primary" data-action="nav" data-view="today">${ICO.check}<span>Open today</span></button></div>` : ''}
     </div>
   </main>${tabBar('today')}`;
 }
@@ -926,16 +1162,13 @@ function renderWeek(weekNum){
   const totalWks = p.json.weeks.length;
   return `<main class="scr">
     <button class="back" data-action="nav" data-view="today">${ICO.cleft}<span>Today</span></button>
-    <div class="scrh hgroup">
-      <div><h1 class="h1">Week ${weekNum}</h1></div>
-      <div class="right-stack"><div class="mono muted" style="font-size:13px">${weekNum} / ${totalWks}</div>${unitToggle()}</div>
+    <div class="titlerow" style="margin-top:4px">
+      <button data-action="open-week" data-week="${weekNum-1}" ${weekNum<=1?'disabled':''}>${ICO.cleft}</button>
+      <div class="center"><div class="h1">Week ${weekNum}</div><div class="mono" style="font-size:11px;color:var(--ink-3);margin-top:2px;letter-spacing:0.06em">${weekNum} OF ${totalWks}${w.label?' · '+esc(w.label).toUpperCase():''}</div></div>
+      <button data-action="open-week" data-week="${weekNum+1}" ${weekNum>=totalWks?'disabled':''}>${ICO.cright}</button>
     </div>
-    <div class="scrsub"><span>${esc(p.name)}</span>${w.label?`<span class="dot"></span><span>${esc(w.label)}</span>`:''}</div>
+    <div class="scrsub" style="padding:14px 0 14px;justify-content:space-between"><span>${esc(p.name)}</span><div class="uxtg compact" data-action="toggle-units"><span class="${State.units==='lb'?'on':''}">lb</span><span class="${State.units==='kg'?'on':''}">kg</span></div></div>
     ${days}
-    <div class="btn-row split" style="padding:8px 0 16px">
-      <button class="btn btn-ghost" data-action="open-week" data-week="${weekNum-1}" ${weekNum<=1?'disabled':''}>${ICO.cleft}<span>Wk ${weekNum-1}</span></button>
-      <button class="btn btn-ghost" data-action="open-week" data-week="${weekNum+1}" ${weekNum>=totalWks?'disabled':''}><span>Wk ${weekNum+1}</span>${ICO.cright}</button>
-    </div>
   </main>${tabBar('today')}`;
 }
 
@@ -1010,12 +1243,8 @@ function renderHistory(monthOffset){
   }
 
   return `<main class="scr">
-    <div class="scrh hgroup"><div><h1 class="h1">History</h1></div><div class="right" style="padding-top:6px">${unitToggle()}</div></div>
-    <div class="pillrow">
-      <button class="pill on">Calendar</button>
-      <button class="pill" data-action="todo-trends">Trends</button>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 0 12px">
+    <div class="scrh hgroup"><div><h1 class="h1">History</h1></div><div class="right" style="padding-top:6px"><div class="uxtg compact" data-action="toggle-units"><span class="${State.units==='lb'?'on':''}">lb</span><span class="${State.units==='kg'?'on':''}">kg</span></div></div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0 12px">
       <button class="iconbtn" data-action="cal-month" data-by="-1">${ICO.cleft}</button>
       <div class="h3">${monthLabel}</div>
       <button class="iconbtn" data-action="cal-month" data-by="1">${ICO.cright}</button>
@@ -1231,6 +1460,7 @@ function render(){
     case "session": html = renderSession(v.id); break;
     case "progress": html = renderProgress(v.name); break;
     case "program": html = renderProgramDetail(v.id); break;
+    case "day": html = renderDayView(v.week, v.dayIndex); break;
     default: html = renderToday();
   }
   root.innerHTML = html;
@@ -1402,17 +1632,70 @@ document.addEventListener("click", async (e) => {
     navigate({ name: "today" });
     return;
   }
-  if (a === "today-more"){
-    showActionSheet([
-      { label: "Add session note", action: () => editSessionNotePrompt() },
-      { label: "Skip session", danger: true, action: () => skipSession() }
-    ]);
+  if (a === "edit-active-note"){
+    editSessionNotePrompt();
+    return;
+  }
+  if (a === "skip-session"){
+    skipSession();
     return;
   }
   if (a === "add-exercise"){
     showAdHocExerciseModal();
     return;
   }
+  if (a === "open-day-view"){
+    const wk = parseInt(t.dataset.week);
+    const di = parseInt(t.dataset.dayIndex);
+    if (!Number.isFinite(wk) || !Number.isFinite(di)) return;
+    const p = State.activeProgram();
+    if (p && wk === p.cursor.week && di === p.cursor.dayIndex){
+      navigate({ name: "today" });
+    } else {
+      navigate({ name: "day", week: wk, dayIndex: di });
+    }
+    return;
+  }
+  if (a === "step-day"){
+    const p = State.activeProgram();
+    if (!p) return;
+    const by = parseInt(t.dataset.by);
+    let w = p.cursor.week, di = p.cursor.dayIndex + by;
+    if (di < 0){
+      if (w <= 1) return;
+      w--; di = (p.json.weeks[w-1].days.length || 1) - 1;
+    } else if (di >= (p.json.weeks[w-1].days.length || 0)){
+      if (w >= p.json.weeks.length) return;
+      w++; di = 0;
+    }
+    navigate({ name: "day", week: w, dayIndex: di });
+    return;
+  }
+  if (a === "exercise-done"){
+    e.stopPropagation();
+    const idx = parseInt(t.dataset.idx);
+    const ex = State.exercisesForToday()[idx];
+    const sets = expandSets(ex);
+    const sess = ensureActiveSession();
+    const startFrom = sess.completed?.[idx] || 0;
+    if (startFrom >= sets.length) return; // already done
+    if (!confirm(`Mark ${ex.name} fully done at the prescribed weight?`)) return;
+    const p = State.activeProgram();
+    for (let i = startFrom; i < sets.length; i++){
+      const s = sets[i];
+      const w = computeIntensityWeight(s.intensity, ex.name, p);
+      const wDisp = w ? roundDisplay(convertWeight(w.value, w.units, State.units), State.units) : 0;
+      const reps = Number.isFinite(s.reps) ? s.reps : (parseInt(s.reps) || 1);
+      logSet(idx, i, ex, s, { weight: wDisp, reps, markedAllDone: true });
+    }
+    sess.restEndsAt = null;
+    if (State.restTimerInterval){ clearInterval(State.restTimerInterval); State.restTimerInterval = null; }
+    State.saveState();
+    render();
+    showToast(`${ex.name} done`);
+    return;
+  }
+  if (a === "noop"){ return; }
 
   // Calendar
   if (a === "cal-month"){
@@ -1459,7 +1742,6 @@ document.addEventListener("click", async (e) => {
     return;
   }
   if (a === "modal-close"){ closeModal(); return; }
-  if (a === "todo-trends"){ showToast("Trends — coming in v2"); return; }
 });
 
 // ORM input change
